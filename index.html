@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>TOPIC — main title · subtitle</title>
+<title>S. aureus quorum sensing &amp; Agr interference · teaching animation</title>
 <style>
   :root{ --bg:#f4f8fe; }
   *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
@@ -34,18 +34,22 @@
 </style>
 </head>
 <body>
-<svg id="stage" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" role="img" aria-label="TOPIC: one-sentence description of the animated diagram.">
+<svg id="stage" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Animated diagram of S. aureus Agr quorum sensing: cognate autoinducing peptide AIP-1 activates the two-component system AgrC-AgrA to switch on virulence genes; a non-cognate AIP from another strain then blocks the receptor and silences the response, which recovers when the foreign signal is gone.">
 <defs>
   <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f8fbff"/><stop offset="1" stop-color="#e9f1fc"/></linearGradient>
-  <!-- TOPIC: add your gradients/patterns here -->
+  <radialGradient id="cellGrad" cx=".38" cy=".32" r=".95"><stop offset="0" stop-color="#ffe3b3"/><stop offset=".55" stop-color="#ffb066"/><stop offset="1" stop-color="#f97e2c"/></radialGradient>
+  <radialGradient id="miniGrad" cx=".38" cy=".34" r=".9"><stop offset="0" stop-color="#ffe0ad"/><stop offset="1" stop-color="#fb9a45"/></radialGradient>
+  <!-- per-cell coordination halo: opaque coccus covers the centre, so opacity peaks in the mid band (IS256 coatGlow idiom) -->
+  <radialGradient id="aipGlow"><stop offset="0" stop-color="#93c5fd" stop-opacity=".45"/><stop offset=".55" stop-color="#60a5fa" stop-opacity=".4"/><stop offset=".85" stop-color="#3b82f6" stop-opacity=".45"/><stop offset="1" stop-color="#3b82f6" stop-opacity=".08"/></radialGradient>
+  <pattern id="pgHatch" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0,7 L7,0 M-1,1 L1,-1 M6,8 L8,6" stroke="#f97316" stroke-opacity=".25" stroke-width="1.5"/></pattern>
 </defs>
 
 <rect x="-2000" y="-2000" width="7600" height="4800" fill="url(#bgGrad)"/>
 
 <!-- ================= TITLE (copyright line is byte-exact — copyright-credit skill; never move/animate it) ================= -->
 <g id="titleG">
-  <text x="800" y="44" text-anchor="middle" font-size="31" font-weight="800" fill="#1e293b" letter-spacing=".2">TOPIC — main title</text>
-  <text x="800" y="71" text-anchor="middle" font-size="16.5" fill="#64748b">subtitle — one line on what the film shows</text>
+  <text x="800" y="44" text-anchor="middle" font-size="31" font-weight="800" fill="#1e293b" letter-spacing=".2">Quorum sensing &amp; Agr interference in <tspan font-style="italic">S. aureus</tspan></text>
+  <text x="800" y="71" text-anchor="middle" font-size="16.5" fill="#64748b">AIP-1 accumulates past a threshold and switches virulence on — until a foreign, non-cognate AIP silences the receptor</text>
   <text x="26" y="98" font-size="13" fill="#a3aec0" font-family="'Segoe Script','Brush Script MT','Comic Sans MS',cursive">© Sean P Nair</text>
 </g>
 
@@ -60,16 +64,111 @@
 <!-- legend zone) and y>800 (fixed UI strip — anything below collides).  -->
 <!-- ============================================================ -->
 <g id="scene">
-  <!-- demo scene: one element flies out and back; two state chips toggle. Seam-safe by construction (see render()). -->
-  <circle id="dot" cx="300" cy="450" r="28" fill="#4d7cfe"/>
-  <g id="chipOnG">
-    <rect x="1180" y="427" width="220" height="46" rx="23" fill="#dcfce7" stroke="#4ade80"/>
-    <text x="1290" y="456" text-anchor="middle" font-size="17" font-weight="800" fill="#15803d">STATE ON</text>
+  <!-- ================= GENE BAND (top strip) — agrBDCA operon, P2 + P3 promoters ================= -->
+  <line x1="100" y1="205" x2="1160" y2="205" stroke="#b9c7de" stroke-width="9" stroke-linecap="round"/>
+  <rect x="145" y="182" width="10" height="46" fill="#f59e0b"/>
+  <text x="150" y="176" font-size="13.5" font-weight="800" fill="#b45309">P2</text>
+  <!-- gene arrows: P→N, height 46 (y182..228), italic white labels centred -->
+  <g id="geneB"><path d="M180,182 h126 l54,23 l-54,23 h-126 z" fill="#4d7cfe"/><text x="270" y="212" text-anchor="middle" font-size="16.5" font-weight="700" font-style="italic" fill="#fff">agrB</text></g>
+  <g id="geneD"><path d="M380,182 h126 l54,23 l-54,23 h-126 z" fill="#4d7cfe"/><text x="470" y="212" text-anchor="middle" font-size="16.5" font-weight="700" font-style="italic" fill="#fff">agrD</text></g>
+  <g id="geneC"><path d="M620,182 h116 l48,23 l-48,23 h-116 z" fill="#4d7cfe"/><text x="705" y="212" text-anchor="middle" font-size="16.5" font-weight="700" font-style="italic" fill="#fff">agrC</text></g>
+  <g id="geneA"><path d="M810,182 h116 l48,23 l-48,23 h-116 z" fill="#4d7cfe"/><text x="895" y="212" text-anchor="middle" font-size="16.5" font-weight="700" font-style="italic" fill="#fff">agrA</text></g>
+  <rect x="1005" y="182" width="10" height="46" fill="#f59e0b"/>
+  <text x="1010" y="176" font-size="13.5" font-weight="800" fill="#b45309">P3</text>
+  <g id="viruPill"><rect x="1028" y="248" width="152" height="34" rx="17" fill="#dcfce7" stroke="#4ade80"/><text x="1104" y="270" text-anchor="middle" font-size="14.5" font-weight="800" fill="#15803d">P3 virulence</text></g>
+  <text id="viruSub" x="1100" y="302" text-anchor="middle" font-size="12.5" fill="#64748b">hla · PVL (lukSF-PV) · TSST-1</text>
+
+  <!-- transcription arrows out of AgrA~P: autocatalytic loop back to P2, virulence path to P3 -->
+  <path id="loopPath" d="M436,424 C370,330 240,290 156,218" fill="none" stroke="#f59e0b" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="12 8"/>
+  <path id="viruPath" d="M448,420 C640,300 880,250 1008,216" fill="none" stroke="#f59e0b" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="12 8"/>
+
+  <!-- ================= THE CELL (left) — S. aureus with the agr circuit inside ================= -->
+  <circle cx="480" cy="470" r=165 fill="url(#cellGrad)" stroke="#fdba74" stroke-width="2"/>
+  <circle cx="480" cy="470" r=157 fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="9"/>
+  <circle cx="480" cy="470" r=157 fill="url(#pgHatch)" opacity=".8"/>
+  <circle cx="480" cy="470" r=145 fill="none" stroke="#fff" stroke-opacity=".95" stroke-width="9"/>
+  <ellipse cx="425" cy="412" rx=66 ry=30 transform="rotate(-28 425 412)" fill="#ffffff" opacity=".25"/>
+
+  <!-- AgrA response regulator (violet); phosphate badge = active AgrA~P -->
+  <circle cx="430" cy="430" r=24 fill="#8b5cf6"/>
+  <text x="430" y="478" text-anchor="middle" font-size="15" font-weight="800" fill="#7c2d12">AgrA</text>
+  <g id="phosBadge"><circle cx="456" cy="404" r=11 fill="#fbbf24" stroke="#fff" stroke-width="2"/><text x="456" y="409" text-anchor="middle" font-size="12.5" font-weight="800" fill="#78350f">P</text></g>
+
+  <!-- AgrC receptor embedded in the membrane (donut = thiolactone macrocycle binding glyph) -->
+  <rect x=554 y=323 width=74 height=72 rx=18 fill="#ede9fe"/>
+  <g id="recGlow">
+    <rect id="recRect" x=562 y=331 width=58 height=56 rx=12 fill="#8b5cf6"/>
+    <text x=591 y=364 text-anchor="middle" font-size="15.5" font-weight="800" fill="#fff">AgrC</text>
   </g>
-  <g id="chipOffG" opacity="0">
-    <rect x="1180" y="427" width="220" height="46" rx="23" fill="#fee2e2" stroke="#f87171"/>
-    <text x="1290" y="456" text-anchor="middle" font-size="17" font-weight="800" fill="#b91c1c">STATE OFF</text>
+  <g id="dockBlueG"><circle cx=614 cy=336 r=8.5 fill="#4d7cfe"/><circle cx=614 cy=336 r=3.2 fill="#fff"/></g>
+  <g id="dockRedG" opacity="0"><circle cx=614 cy=336 r=8.5 fill="#ef4444"/><circle cx=614 cy=336 r=3.2 fill="#fff"/></g>
+
+  <!-- AgrB maturation/exporter on the lower membrane -->
+  <rect x=340 y=553 width=58 height=56 rx=12 fill="#14b8a6"/>
+  <text x=369 y=586 text-anchor="middle" font-size="15.5" font-weight="800" fill="#fff">AgrB</text>
+  <circle id="pulseRing" cx=346 cy=604 r=9 fill="none" stroke="#14b8a6" stroke-width="3"/>
+
+  <!-- ================= THE POPULATION (right of cell) — six cocci, per-cell AIP halos ================= -->
+  <circle id="mh0" cx=840 cy=548 r=44 fill="url(#aipGlow)"/><circle id="mh1" cx=778 cy=598 r=44 fill="url(#aipGlow)"/>
+  <circle id="mh2" cx=902 cy=598 r=44 fill="url(#aipGlow)"/><circle id="mh3" cx=806 cy=664 r=44 fill="url(#aipGlow)"/>
+  <circle id="mh4" cx=874 cy=664 r=44 fill="url(#aipGlow)"/><circle id="mh5" cx=840 cy=614 r=44 fill="url(#aipGlow)"/>
+  <circle id="m0" cx=840 cy=548 r=28 fill="url(#miniGrad)" stroke="#fb923c" stroke-width="4"/>
+  <circle id="m1" cx=778 cy=598 r=28 fill="url(#miniGrad)" stroke="#fb923c" stroke-width="4"/>
+  <circle id="m2" cx=902 cy=598 r=28 fill="url(#miniGrad)" stroke="#fb923c" stroke-width="4"/>
+  <circle id="m3" cx=806 cy=664 r=28 fill="url(#miniGrad)" stroke="#fb923c" stroke-width="4"/>
+  <circle id="m4" cx=874 cy=664 r=28 fill="url(#miniGrad)" stroke="#fb923c" stroke-width="4"/>
+  <circle id="m5" cx=840 cy=614 r=28 fill="url(#miniGrad)" stroke="#fb923c" stroke-width="4"/>
+  <text x=840 y=742 text-anchor="middle" font-size="12.5" fill="#94a3b8">the population</text>
+
+  <!-- ================= AMBIENT AIP FIELD — blue cognate (always) + red foreign (interference chapters) ================= -->
+  <g id="bd0"><circle r=8 fill="#4d7cfe"/><circle r=3 fill="#fff"/></g>
+  <g id="bd1"><circle r=8 fill="#4d7cfe"/><circle r=3 fill="#fff"/></g>
+  <g id="bd2"><circle r=8 fill="#4d7cfe"/><circle r=3 fill="#fff"/></g>
+  <g id="bd3"><circle r=8 fill="#4d7cfe"/><circle r=3 fill="#fff"/></g>
+  <g id="bd4"><circle r=8 fill="#4d7cfe"/><circle r=3 fill="#fff"/></g>
+  <g id="bd5"><circle r=8 fill="#4d7cfe"/><circle r=3 fill="#fff"/></g>
+  <g id="redG" opacity="0">
+    <g transform="translate(700,390)"><circle r=8.5 fill="#ef4444"/><circle r=3.2 fill="#fff"/></g>
+    <g transform="translate(770,480)"><circle r=8.5 fill="#ef4444"/><circle r=3.2 fill="#fff"/></g>
+    <g transform="translate(940,430)"><circle r=8.5 fill="#ef4444"/><circle r=3.2 fill="#fff"/></g>
+    <g transform="translate(1010,510)"><circle r=8.5 fill="#ef4444"/><circle r=3.2 fill="#fff"/></g>
+    <g transform="translate(1080,380)"><circle r=8.5 fill="#ef4444"/><circle r=3.2 fill="#fff"/></g>
   </g>
+
+  <!-- ================= STATE CHIPS (bottom-left, above the caption strip) ================= -->
+  <g id="chipOnG"><rect x=395 y=686 width=170 height=40 rx=20 fill="#dcfce7" stroke="#4ade80"/><text x=480 y=712 text-anchor="middle" font-size="16.5" font-weight="800" fill="#15803d">QUORUM ON</text></g>
+  <g id="chipOffG" opacity="0"><rect x=365 y=686 width=230 height=40 rx=20 fill="#fee2e2" stroke="#f87171"/><text x=480 y=712 text-anchor="middle" font-size="16.5" font-weight="800" fill="#b91c1c">SILENT — no response</text></g>
+
+  <!-- ================= INSET 1: P3-lacZ / X-gal readout (top-right, persistent) ================= -->
+  <rect x=1200 y=240 width=330 height=160 rx=16 fill="#fff" opacity=".9" stroke="#c7d4ea"/>
+  <text x=1365 y=268 text-anchor="middle" font-size="15.5" font-weight="800" fill="#334155">P3-lacZ · X-gal readout</text>
+  <circle cx=1300 cy=330 r=46 fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <g id="xgalBlueG">
+    <circle cx=1284 cy=320 r=9 fill="#2743c9"/><circle cx=1314 cy=314 r=9 fill="#2743c9"/>
+    <circle cx=1320 cy=340 r=9 fill="#2743c9"/><circle cx=1292 cy=348 r=9 fill="#2743c9"/>
+    <circle cx=1276 cy=338 r=9 fill="#2743c9"/>
+  </g>
+  <g id="xgalPaleG" opacity="0">
+    <circle cx=1284 cy=320 r=9 fill="#e5eaf2" stroke="#cbd5e1" stroke-width="1.5"/><circle cx=1314 cy=314 r=9 fill="#e5eaf2" stroke="#cbd5e1" stroke-width="1.5"/>
+    <circle cx=1320 cy=340 r=9 fill="#e5eaf2" stroke="#cbd5e1" stroke-width="1.5"/><circle cx=1292 cy=348 r=9 fill="#e5eaf2" stroke="#cbd5e1" stroke-width="1.5"/>
+    <circle cx=1276 cy=338 r=9 fill="#e5eaf2" stroke="#cbd5e1" stroke-width="1.5"/>
+  </g>
+  <text x=1440 y=326 font-size="12.5" fill="#64748b">blue =</text>
+  <text x=1440 y=344 font-size="12.5" fill="#64748b">P3 active</text>
+
+  <!-- ================= INSET 2: AIP concentration vs threshold (right column, persistent) ================= -->
+  <rect x=1200 y=440 width=330 height=260 rx=16 fill="#fff" opacity=".9" stroke="#c7d4ea"/>
+  <text x=1365 y=470 text-anchor="middle" font-size="15.5" font-weight="800" fill="#334155">AIP concentration vs threshold</text>
+  <text x=1230 y=500 font-size="12.5" font-weight="700" fill="#475569">AIP-1 (cognate)</text>
+  <rect x=1230 y=508 width=270 height=24 rx=12 fill="#e8edf6"/>
+  <rect id="gaugeBlueFill" x=1230 y=508 width=229.5 height=24 rx=12 fill="#4d7cfe"/>
+  <text x=1230 y=576 font-size="12.5" font-weight="700" fill="#475569">non-cognate AIP (foreign)</text>
+  <rect x=1230 y=584 width=270 height=24 rx=12 fill="#e8edf6"/>
+  <rect id="gaugeRedFill" x=1230 y=584 width=0 height=24 rx=12 fill="#ef4444"/>
+  <line x1=1392 y1=500 x2=1392 y2=608 stroke="#64748b" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x=1392 y=626 text-anchor="middle" font-size="12" fill="#64748b">threshold</text>
+  <g id="recStateA"><rect x=1270 y=642 width=190 height=34 rx=17 fill="#dcfce7" stroke="#4ade80"/><text x=1365 y=664 text-anchor="middle" font-size="13.5" font-weight="800" fill="#15803d">AgrC sensing AIP-1</text></g>
+  <g id="recStateB" opacity="0"><rect x=1250 y=642 width=230 height=34 rx=17 fill="#fee2e2" stroke="#f87171"/><text x=1365 y=664 text-anchor="middle" font-size="13.5" font-weight="800" fill="#b91c1c">blocked by non-cognate AIP</text></g>
 </g>
 
 <!-- render/test badge (bottom-right; only visible with ?test=1) -->
@@ -96,15 +195,21 @@
    steady state and the last chapter returns everything home.
    ============================================================ */
 
-const D = 12;                 // loop duration (s) — TOPIC: set your total length
-const CH = [0, 4, 8];         // chapter start times — TOPIC: one per stage
-const CAPTIONS = [            // TOPIC: one [titleLine, bodyLine] per chapter (<b> stage name, <i> gene/species names)
-  ["<b>STAGE ONE</b> — replace with your first chapter's title line.","Second line: what is happening and why it matters."],
-  ["<b>STAGE TWO</b> — the transition (something moves / a state changes).","Describe the mechanism in one plain-language sentence."],
-  ["<b>STAGE THREE</b> — everything returns home so the loop restarts seamlessly.","By t = D every visual is back at its t = 0 value."]
+const D = 36;                 // loop duration (s) — four ×9 s chapters, seamless: frame(D-eps) == frame(0)
+const CH = [0, 9, 18, 27];    // chapter start times — QUORUM / INVASION / SILENT / RECOVERY
+const CAPTIONS = [            // one [titleLine, bodyLine] per chapter (<b> stage name, <i> gene/species names)
+  ["<b>QUORUM</b> — enough cells, enough signal","Cognate AIP-1 (blue) accumulates past the threshold; <i>AgrC</i> hands a phosphate to <i>AgrA</i>, which fires the <i>P3</i> virulence genes and re-switches on its own operon via <i>P2</i> — an autocatalytic loop. The X-gal reporter turns blue."],
+  ["<b>INVASION</b> — a foreign signal floods in","A neighbouring strain — e.g. a commensal staphylococcus from the skin — releases its own, non-cognate AIP (red). It out-competes AIP-1 for <i>AgrC</i>, and because it is an antagonist it blocks receptor activation. The loop collapses even though our cells are still crowded."],
+  ["<b>SILENT</b> — high density, no response","Non-cognate AIPs inhibit rather than activate: virulence genes stay off, the X-gal colonies remain colourless, and no new AIP-1 is made. This is how commensals can disarm a pathogen's virulence switch."],
+  ["<b>RECOVERY</b> — the foreign signal washes out","As red AIP dissipates, cognate AIP-1 re-binds <i>AgrC</i>; the autocatalytic loop restarts and <i>P3</i> fires again. By the end of this chapter every visual is back at its opening state — the loop closes."]
 ];
-const LEGEND = [              // TOPIC: your colour key — [fill, label]; label may contain <tspan font-style="italic">…</tspan>
-  ["#4d7cfe","topic element"],["#f97362","state marker"]
+const LEGEND = [              // colour key — [fill, label]
+  ["#4d7cfe","AIP-1 — cognate autoinducer"],
+  ["#ef4444","non-cognate AIP — foreign signal"],
+  ["#8b5cf6","AgrC receptor · AgrA regulator"],
+  ["#fbbf24","phosphate badge — active AgrA~P"],
+  ["#14b8a6","AgrB — AIP maturation/exporter"],
+  ["#2743c9","X-gal blue — P3 reporter ON"]
 ];
 
 /* ---------- helpers (engine — do not edit) ---------- */
@@ -143,19 +248,54 @@ function render(t){
   const ch = chapterOf(t);
 
   /* ============================================================ */
-  /* TOPIC SCENE LOGIC — replace this block wholesale.             */
-  /* Demo: dot flies out (ch1) and back home (ch2); chips toggle.  */
-  /* Every value below is derived from t alone; the return trip    */
-  /* finishes inside chapter 3 so frame(D-eps) == frame(0).        */
+  /* SCENE LOGIC — every value derived from t alone (pure fn).     */
+  /* QUORUM(steady) → INVASION(foreign AIP blocks AgrC) → SILENT   */
+  /* (no response) → RECOVERY(back to steady before the seam).     */
   /* ============================================================ */
-  let x = 300;
-  if(ch===1){ x = 300 + (900-300)*easeIO(seg(t,4.5,7)); }          // fly out
-  else if(ch===2){ const p=easeIO(seg(t,9.5,11.5)); x = 900+(300-900)*p; }  // return home before the seam
-  $("dot").setAttribute("cx", x.toFixed(1));
+  let blue, red, on;
+  if(ch===0){ blue=85; red=0; on=1; }                                                        // QUORUM: steady state above threshold
+  else if(ch===1){ red = 95*easeIO(seg(t,10,14)); on = 1-seg(t,13,15); blue = 85-13*easeIO(seg(t,15,18)); } // INVASION →72
+  else if(ch===2){ red = 95-9*seg(t,18,27); on=0; blue = 72-8*seg(t,18,27); }                // SILENT →64 / red→86
+  else { red = 86*(1-easeIO(seg(t,27.5,31.5))); on=easeIO(seg(t,30.5,32)); blue=64+21*easeIO(seg(t,30.5,35.5)); } // RECOVERY → exactly 85/0/1 at D
+  const redOcc = seg(t,12.5,14)*(1-seg(t,30,32));   // foreign AIP occupancy of the AgrC site (seam-safe: 0 at t=0 and t=D)
 
-  const off = ch===2 ? seg(t,8.2,9)*(1-seg(t,11.5,11.9)) : 0;       // OFF chip: fades in, then back OUT again before the seam
-  const on  = ch===2 ? 1-off : 1;                                   // ON chip: steady in ch0/ch1, dips only while OFF shows — restored to 1 by t=D (seam)
-  setOp($("chipOnG"), on); setOp($("chipOffG"), off);
+  /* gene band + virulence pill: dim (0.35) when silent, lit (1.0) when quorum is on */
+  const geneLit = .35+.65*on;
+  for(const id of ["geneB","geneD","geneC","geneA"]){ setOp($(id), geneLit); }
+  setOp($("viruPill"), geneLit); setOp($("viruSub"), geneLit);
+
+  /* transcription arrows: marching dashes — speed·D = 360 = 18×20 (period) → seam-safe */
+  const dashOff = -(t*10 % 20);
+  for(const id of ["loopPath","viruPath"]){ setOp($(id), on*.95); $(id).setAttribute("stroke-dashoffset", dashOff.toFixed(2)); }
+
+  /* AgrA~P badge; receptor dims while the foreign AIP occupies its site */
+  setOp($("phosBadge"), on);
+  $("recRect").setAttribute("fill-opacity", (1-.55*redOcc).toFixed(3));
+  setOp($("dockBlueG"), 1-redOcc);
+  setOp($("dockRedG"), redOcc);
+
+  /* AgrB export pulse — cos period 9 s divides D=36 → seam-safe */
+  $("pulseRing").setAttribute("r", (9+5*(0.5-0.5*Math.cos(2*Math.PI*t/9))).toFixed(2));
+  setOp($("pulseRing"), .6*on);
+
+  /* per-cell AIP halos + red ambient field */
+  for(let i=0;i<6;i++){ setOp($("mh"+i), .5*on); }
+  setOp($("redG"), Math.min(1, red/95));
+
+  /* blue ambient donuts orbit their anchors — periods divide D → seam-safe */
+  const BX=[150,240,330,560,690,120], BY=[470,350,700,706,650,600], PER=[9,12,6,9,12,6];
+  for(let i=0;i<6;i++){
+    const a = 2*Math.PI*t/PER[i]*(i%2?-1:1);
+    $("bd"+i).setAttribute("transform", `translate(${(BX[i]+14*Math.cos(a)).toFixed(2)},${(BY[i]+14*Math.sin(a)).toFixed(2)})`);
+  }
+
+  /* state chips + X-gal inset + gauge — incoming text chip waits until the outgoing one is faint (no garbled overlap) */
+  const offChip = clamp((.4-on)/.4, 0, 1);
+  setOp($("chipOnG"), on); setOp($("chipOffG"), offChip);
+  setOp($("xgalBlueG"), on); setOp($("xgalPaleG"), 1-on);
+  $("gaugeBlueFill").setAttribute("width", (270*blue/100).toFixed(1));
+  $("gaugeRedFill").setAttribute("width", (270*red/100).toFixed(1));
+  setOp($("recStateA"), on); setOp($("recStateB"), offChip);
 
   /* caption pill (engine — do not edit) */
   const cap = $("capPill"), ck = ch+"|"+CAPTIONS[ch][0].length;
@@ -163,24 +303,27 @@ function render(t){
   setOp($("titleG"), .98);
 
   S.t=t; S.chapter=ch;
-  S.dotX=x; S.on=on; S.off=off;   // TOPIC: extend with the state your self-test asserts on
+  S.blue=+blue.toFixed(1); S.red=+red.toFixed(1); S.on=+on.toFixed(2);
+  S.geneLit=+geneLit.toFixed(2); S.redOcc=+redOcc.toFixed(2); S.xgal = on>.5?1:0;
 }
 
 /* ---------- self-test (?test=1) — TOPIC: replace checks with assertions about YOUR scene, keep the seam block ---------- */
 function runSelfTest(){
   const checks=[
-    [1,    s=>s.chapter===0 && Math.abs(s.dotX-300)<1],   // steady start (seam anchor)
-    [7,    s=>Math.abs(s.dotX-900)<1],                    // flown out and settled
-    [9.5,  s=>s.off>.9],                                  // state chip flipped in ch2
-    [11.8, s=>Math.abs(s.dotX-300)<2]                     // home again before the seam
+    [4,     s=>s.chapter===0 && Math.abs(s.blue-85)<.5 && s.red<.5 && s.on>.99],   // quorum steady state (seam anchor)
+    [13,    s=>s.red>30 && s.redOcc>.2],                                           // foreign AIP flooding in and occupying AgrC
+    [16.5,  s=>s.on<.15 && s.blue>70 && s.blue<82],                                // loop collapsing mid-invasion
+    [22.5,  s=>s.on<.01 && s.red>85 && s.xgal===0],                                // silent: high density, no response
+    [30,    s=>s.red<50 && s.on<.1],                                               // foreign signal washing out
+    [34,    s=>s.on>.9 && s.red<1 && Math.abs(s.blue-85)<6]                        // quorum restored before the seam
   ];
   let ok=true; const fails=[];
   for(const [t,pred] of checks){ render(t); if(!pred(S)) {ok=false; fails.push(`t=${t}: state=${JSON.stringify(S)}`);} }
   /* seam: last frame ≈ first frame (visual state only) — snap() whatever the eye sees */
-  const snap = () => ({x:Math.round(S.dotX), on:+S.on.toFixed(2), off:+S.off.toFixed(2)});
+  const snap = () => ({blue:S.blue, red:+S.red.toFixed(0), on:+S.on.toFixed(2), geneLit:+S.geneLit.toFixed(2), redOcc:+S.redOcc.toFixed(2), xgal:S.xgal});
   render(D-0.02); const a=snap();
   render(0.02);   const b=snap();
-  if(Math.abs(a.x-b.x)>4||Math.abs(a.on-b.on)>.1||Math.abs(a.off-b.off)>.1){ ok=false; fails.push(`seam mismatch ${JSON.stringify({end:a,start:b})}`); }
+  if(Math.abs(a.blue-b.blue)>1||Math.abs(a.red-b.red)>2||Math.abs(a.on-b.on)>.05||Math.abs(a.geneLit-b.geneLit)>.05||Math.abs(a.redOcc-b.redOcc)>.05||a.xgal!==b.xgal){ ok=false; fails.push(`seam mismatch ${JSON.stringify({end:a,start:b})}`); }
   document.body.dataset.selftest = ok?"PASS":"FAIL";
   $("badge").textContent = `self-test: ${ok?"PASS":"FAIL"}`+(fails.length? " — "+fails[0]:"");
   return {ok, fails};

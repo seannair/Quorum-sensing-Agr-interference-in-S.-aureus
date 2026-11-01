@@ -5,8 +5,8 @@ const fs = require('fs'), path = require('path'), os = require('os');
 const req = createRequire('C:/Users/sfaas/html-video/packages/adapter-hyperframes/package.json');
 const { chromium } = req('playwright');
 
-/* TOPIC: point at your project's page */
-const url = process.argv[2] || 'file:///<PROJECT_DIR>/index.html?test=1';   // e.g. file:///C:/Users/sfaas/Documents/Qwen/workspace/my-topic/index.html?test=1
+/* project page (default) */
+const url = process.argv[2] || 'file:///C:/Users/sfaas/Documents/Qwen/workspace/staph-agr-quorum-sensing/index.html?test=1';
 
 if (url.includes('<PROJECT_DIR>')) { console.error('EDIT ME: set the default URL to this project\'s index.html first'); process.exit(2); }
 

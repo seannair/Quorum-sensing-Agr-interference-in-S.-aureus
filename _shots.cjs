@@ -5,16 +5,16 @@ const fs = require('fs'), path = require('path'), os = require('os');
 const req = createRequire('C:/Users/sfaas/html-video/packages/adapter-hyperframes/package.json');
 const { chromium } = req('playwright');
 
-/* TOPIC: point at your project's page; replace the default timestamps with your key moments */
-const BASE = 'file:///<PROJECT_DIR>/index.html';   // e.g. file:///C:/Users/sfaas/Documents/Qwen/workspace/my-topic/index.html
+/* project page (default) */
+const BASE = 'file:///C:/Users/sfaas/Documents/Qwen/workspace/staph-agr-quorum-sensing/index.html';
 const OUT  = path.join(__dirname, '_shots');
 const VIEWS = [
   ['desktop',   1920, 1080],
   ['phone-por', 390, 844],
   ['phone-land',844, 390]
 ];
-/* starter defaults match the demo scene; edit for your topic */
-const TS = [...new Set([2, 6, 10, ...process.argv.slice(2).map(parseFloat)].filter(Number.isFinite))].sort((a,b)=>a-b);
+/* default key moments: one mid-chapter per chapter (QUORUM / INVASION / SILENT / RECOVERY) */
+const TS = [...new Set([4, 13.5, 22.5, 32.5, ...process.argv.slice(2).map(parseFloat)].filter(Number.isFinite))].sort((a,b)=>a-b);
 
 if (BASE.includes('<PROJECT_DIR>')) { console.error('EDIT ME: set BASE to this project\'s index.html first'); process.exit(2); }
 
