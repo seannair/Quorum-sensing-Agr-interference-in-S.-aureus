@@ -13,8 +13,8 @@ const VIEWS = [
   ['phone-por', 390, 844],
   ['phone-land',844, 390]
 ];
-/* default key moments: one mid-chapter per chapter (QUORUM / INVASION / SILENT / RECOVERY) */
-const TS = [...new Set([4, 13.5, 22.5, 32.5, ...process.argv.slice(2).map(parseFloat)].filter(Number.isFinite))].sort((a,b)=>a-b);
+/* default key moments: one mid-chapter per chapter (SILENCE / GROWTH-crossing / QUORUM ON / INVASION→SILENT / RECOVERY) */
+const TS = [...new Set([4, 13.8, 24, 34.2, 43.6, ...process.argv.slice(2).map(parseFloat)].filter(Number.isFinite))].sort((a,b)=>a-b);
 
 if (BASE.includes('<PROJECT_DIR>')) { console.error('EDIT ME: set BASE to this project\'s index.html first'); process.exit(2); }
 
