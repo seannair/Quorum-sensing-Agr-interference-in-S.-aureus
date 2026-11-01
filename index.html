@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>TOPIC — main title · subtitle</title>
+<style>
+  :root{ --bg:#f4f8fe; }
+  *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  html,body{ height:100%; background:var(--bg); overflow:hidden; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  /* the page NEVER scrolls — everything lives on one screen (see playbook §7 for phone geometry) */
+  #stage{ position:fixed; inset:0; width:100%; height:100%; display:block; touch-action:manipulation; cursor:pointer; }
+  /* ---------- interactive chrome (hidden in render mode — captures keep captions + credit) ---------- */
+  #ui{ position:fixed; left:0; right:0; bottom:0; z-index:5; padding:8px max(12px, env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom)); display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center;
+       background:linear-gradient(rgba(244,248,254,0), rgba(244,248,254,.9) 30%); pointer-events:none; }
+  #ui > *{ pointer-events:auto; }
+  button{ font-family:inherit; border:none; cursor:pointer; color:#fff; background:linear-gradient(135deg,#3b82f6,#2563eb); padding:9px 16px; min-height:40px; border-radius:11px; font-size:14px; font-weight:600; box-shadow:0 2px 8px rgba(37,99,235,.35); transition:filter .15s, transform .1s; }
+  button:hover{ filter:brightness(1.08); } button:active{ transform:scale(.96); }
+  #dots{ display:flex; gap:7px; align-items:center; }
+  .dot{ width:13px; height:13px; border-radius:50%; background:#c7d4ea; border:none; cursor:pointer; padding:0; transition:.2s; box-shadow:none; min-height:0; }
+  .dot.active{ background:#f59e0b; transform:scale(1.28); }
+  #speedWrap, #scrubWrap{ display:flex; align-items:center; gap:7px; color:#475569; font-size:13px; font-weight:600; }
+  input[type=range]{ -webkit-appearance:none; appearance:none; width:92px; height:5px; border-radius:3px; background:#c7d4ea; outline:none; }
+  #scrub{ width:min(38vw,260px); }
+  input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:#f59e0b; cursor:pointer; border:2.5px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.3); }
+  input[type=range]::-moz-range-thumb{ width:16px; height:16px; border-radius:50%; background:#f59e0b; cursor:pointer; border:2.5px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.3); }
+  #prog{ position:fixed; left:0; right:0; bottom:0; height:4px; background:#dbe6f5; z-index:6; }
+  #progBar{ height:100%; width:0%; background:linear-gradient(90deg,#f59e0b,#fb7185); }
+  body.render-mode #ui, body.render-mode #prog{ display:none; }
+  /* chapter caption — HTML pill so it keeps a fixed CSS-px size at any window (scaled SVG text was illegible on phones and overlapped the control bar) */
+  #capPill{ position:fixed; left:max(12px, env(safe-area-inset-left)); bottom:calc(64px + env(safe-area-inset-bottom)); z-index:4; max-width:min(592px, calc(100vw - 32px));
+       background:#fff; border:1px solid #c7d4ea; border-radius:14px; box-shadow:0 2px 8px rgba(15,23,42,.10); padding:9px 16px; font-size:15px; line-height:1.45; color:#0f172a; pointer-events:none; }
+  @media (max-width:560px){ #capPill{ bottom:calc(120px + env(safe-area-inset-bottom)); font-size:14px; max-width:calc(100vw - 32px); } }
+</style>
+</head>
+<body>
+<svg id="stage" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" role="img" aria-label="TOPIC: one-sentence description of the animated diagram.">
+<defs>
+  <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f8fbff"/><stop offset="1" stop-color="#e9f1fc"/></linearGradient>
+  <!-- TOPIC: add your gradients/patterns here -->
+</defs>
+
+<rect x="-2000" y="-2000" width="7600" height="4800" fill="url(#bgGrad)"/>
+
+<!-- ================= TITLE (copyright line is byte-exact — copyright-credit skill; never move/animate it) ================= -->
+<g id="titleG">
+  <text x="800" y="44" text-anchor="middle" font-size="31" font-weight="800" fill="#1e293b" letter-spacing=".2">TOPIC — main title</text>
+  <text x="800" y="71" text-anchor="middle" font-size="16.5" fill="#64748b">subtitle — one line on what the film shows</text>
+  <text x="26" y="98" font-size="13" fill="#a3aec0" font-family="'Segoe Script','Brush Script MT','Comic Sans MS',cursive">© Sean P Nair</text>
+</g>
+
+<!-- ================= LEGEND (built by JS from the LEGEND array below) ================= -->
+<g id="legendG" font-size="13" fill="#475569"></g>
+
+<!-- ============================================================ -->
+<!-- TOPIC SCENE — replace everything between these markers wholesale.   -->
+<!-- Rules: every element render(t) touches gets an id; all state is set  -->
+<!-- per frame (cx/cy/transform for position, opacity via setOp); nothing -->
+<!-- accumulates across frames. Layout: keep clear of y<110 (title +     -->
+<!-- legend zone) and y>800 (fixed UI strip — anything below collides).  -->
+<!-- ============================================================ -->
+<g id="scene">
+  <!-- demo scene: one element flies out and back; two state chips toggle. Seam-safe by construction (see render()). -->
+  <circle id="dot" cx="300" cy="450" r="28" fill="#4d7cfe"/>
+  <g id="chipOnG">
+    <rect x="1180" y="427" width="220" height="46" rx="23" fill="#dcfce7" stroke="#4ade80"/>
+    <text x="1290" y="456" text-anchor="middle" font-size="17" font-weight="800" fill="#15803d">STATE ON</text>
+  </g>
+  <g id="chipOffG" opacity="0">
+    <rect x="1180" y="427" width="220" height="46" rx="23" fill="#fee2e2" stroke="#f87171"/>
+    <text x="1290" y="456" text-anchor="middle" font-size="17" font-weight="800" fill="#b91c1c">STATE OFF</text>
+  </g>
+</g>
+
+<!-- render/test badge (bottom-right; only visible with ?test=1) -->
+<text id="badge" x="1520" y="890" text-anchor="end" font-size="13" fill="#64748b"></text>
+</svg>
+
+<div id="capPill"></div>
+<div id="ui">
+  <button id="playBtn" type="button">⏸ Pause</button>
+  <div id="dots"></div>
+  <div id="speedWrap"><span>Speed</span><input id="spd" type="range" min="0.5" max="2" step="0.1" value="1"/><span id="spdVal">1×</span></div>
+  <div id="scrubWrap"><input id="scrub" type="range" min="0" max="12" step="0.01" value="0" aria-label="Scrub the timeline to any point in the loop"/><span id="tVal">0.0s</span></div>
+</div>
+<div id="prog"><div id="progBar"></div></div>
+
+<script>
+"use strict";
+/* ============================================================
+   TOPIC — deterministic teaching animation (starter scaffold).
+   Every visual state is a pure function of t (seconds, 0..D).
+   URL modes: ?t=<sec> seek-at-boot + freeze · ?render=1 capture mode
+   (hides interactive chrome only) · ?test=1 self-test badge.
+   Seam rule: frame(D-eps) must equal frame(0) — chapter 0 starts in
+   steady state and the last chapter returns everything home.
+   ============================================================ */
+
+const D = 12;                 // loop duration (s) — TOPIC: set your total length
+const CH = [0, 4, 8];         // chapter start times — TOPIC: one per stage
+const CAPTIONS = [            // TOPIC: one [titleLine, bodyLine] per chapter (<b> stage name, <i> gene/species names)
+  ["<b>STAGE ONE</b> — replace with your first chapter's title line.","Second line: what is happening and why it matters."],
+  ["<b>STAGE TWO</b> — the transition (something moves / a state changes).","Describe the mechanism in one plain-language sentence."],
+  ["<b>STAGE THREE</b> — everything returns home so the loop restarts seamlessly.","By t = D every visual is back at its t = 0 value."]
+];
+const LEGEND = [              // TOPIC: your colour key — [fill, label]; label may contain <tspan font-style="italic">…</tspan>
+  ["#4d7cfe","topic element"],["#f97362","state marker"]
+];
+
+/* ---------- helpers (engine — do not edit) ---------- */
+const $ = id => document.getElementById(id);
+const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+const seg = (t,a,b)=>clamp((t-a)/(b-a),0,1);
+const easeIO = t=> t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+const easeO  = t=> 1-Math.pow(1-t,3);
+function setOp(el,f){ if(f==null) return; el.setAttribute("opacity", f.toFixed(3)); }
+const chapterOf = t => { for(let i=CH.length-1;i>=0;i--) if(t>=CH[i]) return i; return 0; };
+
+/* ---------- params / modes (engine — do not edit) ---------- */
+const P = new URLSearchParams(location.search);
+let renderMode = P.get("render")==="1";
+let testMode   = P.get("test")==="1";
+let seekT      = P.has("t") ? clamp(parseFloat(P.get("t"))||0, 0, D-0.001) : null;
+
+/* ---------- build legend (engine — width formula is tspan-safe; adjust wrap point to taste) ---------- */
+(function buildLegend(){
+  const g = $("legendG"); let x=1000, y=106;
+  for(const [c,label] of LEGEND){
+    const w = label.replace(/<[^>]*>/g,"").length*7.4 + 34;   // width from visible text (italic tspan-safe)
+    if(x+w>1540){ x=1000; y+=22; }
+    g.innerHTML += `<rect x="${x}" y="${y-15}" width="${w}" height="24" rx="12" fill="#ffffff" opacity=".82"/>`+
+      `<circle cx="${x+15}" cy="${y-3}" r="7" fill="${c}"/>`+
+      `<text x="${x+29}" y="${y+2}" font-size="13" fill="#475569">${label}</text>`;
+    x += w + 10;
+  }
+})();
+
+/* ---------- per-frame state (exposed for ?test=1 and external capture) ---------- */
+const S = {};
+
+function render(t){
+  t = ((t % D) + D) % D;
+  const ch = chapterOf(t);
+
+  /* ============================================================ */
+  /* TOPIC SCENE LOGIC — replace this block wholesale.             */
+  /* Demo: dot flies out (ch1) and back home (ch2); chips toggle.  */
+  /* Every value below is derived from t alone; the return trip    */
+  /* finishes inside chapter 3 so frame(D-eps) == frame(0).        */
+  /* ============================================================ */
+  let x = 300;
+  if(ch===1){ x = 300 + (900-300)*easeIO(seg(t,4.5,7)); }          // fly out
+  else if(ch===2){ const p=easeIO(seg(t,9.5,11.5)); x = 900+(300-900)*p; }  // return home before the seam
+  $("dot").setAttribute("cx", x.toFixed(1));
+
+  const off = ch===2 ? seg(t,8.2,9)*(1-seg(t,11.5,11.9)) : 0;       // OFF chip: fades in, then back OUT again before the seam
+  const on  = ch===2 ? 1-off : 1;                                   // ON chip: steady in ch0/ch1, dips only while OFF shows — restored to 1 by t=D (seam)
+  setOp($("chipOnG"), on); setOp($("chipOffG"), off);
+
+  /* caption pill (engine — do not edit) */
+  const cap = $("capPill"), ck = ch+"|"+CAPTIONS[ch][0].length;
+  if(cap.dataset.k!==ck){ cap.dataset.k=ck; cap.innerHTML = CAPTIONS[ch][0]+"<br>"+CAPTIONS[ch][1]; }
+  setOp($("titleG"), .98);
+
+  S.t=t; S.chapter=ch;
+  S.dotX=x; S.on=on; S.off=off;   // TOPIC: extend with the state your self-test asserts on
+}
+
+/* ---------- self-test (?test=1) — TOPIC: replace checks with assertions about YOUR scene, keep the seam block ---------- */
+function runSelfTest(){
+  const checks=[
+    [1,    s=>s.chapter===0 && Math.abs(s.dotX-300)<1],   // steady start (seam anchor)
+    [7,    s=>Math.abs(s.dotX-900)<1],                    // flown out and settled
+    [9.5,  s=>s.off>.9],                                  // state chip flipped in ch2
+    [11.8, s=>Math.abs(s.dotX-300)<2]                     // home again before the seam
+  ];
+  let ok=true; const fails=[];
+  for(const [t,pred] of checks){ render(t); if(!pred(S)) {ok=false; fails.push(`t=${t}: state=${JSON.stringify(S)}`);} }
+  /* seam: last frame ≈ first frame (visual state only) — snap() whatever the eye sees */
+  const snap = () => ({x:Math.round(S.dotX), on:+S.on.toFixed(2), off:+S.off.toFixed(2)});
+  render(D-0.02); const a=snap();
+  render(0.02);   const b=snap();
+  if(Math.abs(a.x-b.x)>4||Math.abs(a.on-b.on)>.1||Math.abs(a.off-b.off)>.1){ ok=false; fails.push(`seam mismatch ${JSON.stringify({end:a,start:b})}`); }
+  document.body.dataset.selftest = ok?"PASS":"FAIL";
+  $("badge").textContent = `self-test: ${ok?"PASS":"FAIL"}`+(fails.length? " — "+fails[0]:"");
+  return {ok, fails};
+}
+
+/* ---------- interaction / loop (engine — do not edit) ---------- */
+let speed=1, last=null;
+const playBtn=$("playBtn"), dotsG=$("dots");
+for(const start of CH){ const d=document.createElement("button"); d.className="dot"; d.type="button";
+  d.addEventListener("click",e=>{ e.stopPropagation(); seek(start+0.01); }); dotsG.appendChild(d); }
+
+function seek(t){ if(seekT!=null) return; curT=clamp(t,0,D-0.001); render(curT); last=null; syncUI(curT); }  // R13: set curT BEFORE rendering
+function syncUI(t){
+  const ch = chapterOf(t);
+  [...dotsG.children].forEach((d,i)=>d.classList.toggle("active",i===ch));
+  $("progBar").style.width=(t/D*100).toFixed(2)+"%";
+  if(!scrubbing) scrub.value = t.toFixed(2);
+  tVal.textContent = t.toFixed(1)+"s";
+}
+playBtn.addEventListener("click",e=>{ e.stopPropagation(); playing=!playing; playBtn.textContent=playing?"⏸ Pause":"▶ Play"; last=null; });
+const scrub=$("scrub"), tVal=$("tVal"); let scrubbing=false;
+scrub.max = (D-0.02).toFixed(2);
+scrub.addEventListener("pointerdown",()=>{ scrubbing=true; });
+window.addEventListener("pointerup",()=>{ scrubbing=false; });
+scrub.addEventListener("input",e=>{ e.stopPropagation(); seek(parseFloat(scrub.value)); });
+$("spd").addEventListener("input",()=>{ speed=parseFloat($("spd").value); $("spdVal").textContent=speed.toFixed(1)+"×"; });
+if(!renderMode) $("stage").addEventListener("pointerdown",e=>{ if(e.target.closest("#ui")) return; playing=!playing; playBtn.textContent=playing?"⏸ Pause":"▶ Play"; last=null; });
+
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* frozen frame in capture/test mode and when an explicit ?t= is given (play button still starts it) */
+let playing = !(renderMode || testMode) && seekT==null && !reduce;
+playBtn.textContent = playing?"⏸ Pause":"▶ Play";
+
+let curT = seekT!=null ? seekT : 0;
+function frame(ts){
+  if(playing && last!=null){ curT=(curT+(ts-last)/1000*speed)%D; render(curT); syncUI(curT); } else { last=null; }
+  last=ts; requestAnimationFrame(frame);
+}
+
+/* ---------- boot (engine — do not edit) ---------- */
+if(renderMode) document.body.classList.add("render-mode");
+render(curT); syncUI(curT);
+if(testMode){ const r=runSelfTest(); console.log(r.ok?"SELF-TEST PASS":"SELF-TEST FAIL", r.fails||""); }
+requestAnimationFrame(frame);
+window.__AGRQS = { render, D, state:()=>S };   // handle for external frame capture (_capture.mjs)
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+# regenerable QA artifacts
+_frames/
+_shots/
+*.log
+
+# local-only session handoff doc — deliberately NOT published to GitHub
+HANDOFF.md
