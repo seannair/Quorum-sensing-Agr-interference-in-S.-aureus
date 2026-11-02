@@ -43,6 +43,9 @@
   <!-- per-cell coordination halo: opaque coccus covers the centre, so opacity peaks in the mid band (IS256 coatGlow idiom) -->
   <radialGradient id="aipGlow"><stop offset="0" stop-color="#93c5fd" stop-opacity=".45"/><stop offset=".55" stop-color="#60a5fa" stop-opacity=".4"/><stop offset=".85" stop-color="#3b82f6" stop-opacity=".45"/><stop offset="1" stop-color="#3b82f6" stop-opacity=".08"/></radialGradient>
   <pattern id="pgHatch" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0,7 L7,0 M-1,1 L1,-1 M6,8 L8,6" stroke="#f97316" stroke-opacity=".25" stroke-width="1.5"/></pattern>
+  <!-- ambient AIP ring glyphs: thiolactone pentagon + tail, the same shape as the biogenesis ring — blue cognate / red non-cognate -->
+  <g id="agB"><circle cx="0" cy="-6.5" r="3" fill="#4d7cfe"/><circle cx="6.2" cy="-2" r="3" fill="#4d7cfe"/><circle cx="3.8" cy="5.3" r="3" fill="#4d7cfe"/><circle cx="-3.8" cy="5.3" r="3" fill="#4d7cfe"/><circle cx="-6.2" cy="-2" r="3" fill="#4d7cfe"/><circle cx="9.5" cy="8" r="3" fill="#4d7cfe"/><circle cx="14" cy="10.5" r="3" fill="#4d7cfe"/></g>
+  <g id="agR"><circle cx="0" cy="-6.5" r="3" fill="#ef4444"/><circle cx="6.2" cy="-2" r="3" fill="#ef4444"/><circle cx="3.8" cy="5.3" r="3" fill="#ef4444"/><circle cx="-3.8" cy="5.3" r="3" fill="#ef4444"/><circle cx="-6.2" cy="-2" r="3" fill="#ef4444"/><circle cx="9.5" cy="8" r="3" fill="#ef4444"/><circle cx="14" cy="10.5" r="3" fill="#ef4444"/></g>
 </defs>
 
 <rect x="-2000" y="-2000" width="7600" height="4800" fill="url(#bgGrad)"/>
@@ -85,11 +88,12 @@
   <path id="txPath" d="M150,163 H974" fill="none" stroke="#f59e0b" stroke-width="4.5" opacity="0"/>
   <text id="txLbl" x=560 y=152 text-anchor="middle" font-size="13" font-style="italic" fill="#b45309" opacity="0">agrBDCA mRNA</text>
 
-  <!-- transcription arrows out of AgrA~P: autocatalytic loop back to P2, virulence path to P3 -->
-  <path id="loopPath" d="M436,424 C370,330 240,290 156,218" fill="none" stroke="#f59e0b" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="12 8"/>
-  <path id="viruPath" d="M448,420 C640,300 880,250 1008,216" fill="none" stroke="#f59e0b" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="12 8"/>
+  <!-- transcription arrows out of AgrA~P: autocatalytic loop back to P2, virulence path to P3 (starts follow the +60 cell shift) -->
+  <path id="loopPath" d="M496,424 C430,330 240,290 156,218" fill="none" stroke="#f59e0b" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="12 8"/>
+  <path id="viruPath" d="M508,420 C700,300 880,250 1008,216" fill="none" stroke="#f59e0b" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="12 8"/>
 
-  <!-- ================= THE CELL (left) — S. aureus with the agr circuit inside ================= -->
+  <!-- ================= THE CELL (centre) — S. aureus with the agr circuit inside; whole block shifted +60 via group transform ================= -->
+  <g id="cellBlock" transform="translate(60,0)">
   <circle cx="480" cy="470" r=165 fill="url(#cellGrad)" stroke="#fdba74" stroke-width="2"/>
   <circle cx="480" cy="470" r=157 fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="9"/>
   <circle cx="480" cy="470" r=157 fill="url(#pgHatch)" opacity=".8"/>
@@ -129,11 +133,22 @@
   <text x=369 y=586 text-anchor="middle" font-size="15.5" font-weight="800" fill="#fff">AgrB</text>
   <circle id="pulseRing" cx=346 cy=604 r=9 fill="none" stroke="#14b8a6" stroke-width="3"/>
 
-  <!-- ================= THE POPULATION (right of cell) — up to eight cocci; cells pop in/out with density(t) ================= -->
-  <circle id="mh0" cx=840 cy=548 r=44 fill="url(#aipGlow)"/><circle id="mh1" cx=778 cy=598 r=44 fill="url(#aipGlow)"/>
-  <circle id="mh2" cx=902 cy=598 r=44 fill="url(#aipGlow)"/><circle id="mh3" cx=806 cy=664 r=44 fill="url(#aipGlow)"/>
-  <circle id="mh4" cx=874 cy=664 r=44 fill="url(#aipGlow)"/><circle id="mh5" cx=840 cy=614 r=44 fill="url(#aipGlow)"/>
-  <circle id="mh6" cx=755 cy=537 r=44 fill="url(#aipGlow)"/><circle id="mh7" cx=925 cy=537 r=44 fill="url(#aipGlow)"/>
+  <!-- AIP biogenesis (inside the main cell): AgrD propeptide → AgrB matures + exports mature ring-AIP; labels name the agrD step -->
+  <g id="bioProG" opacity="0"><circle cx="-16" cy="0" r="3.4" fill="#a5b4fc"/><circle cx="-8" cy="0" r="3.4" fill="#a5b4fc"/><circle cx="0" cy="0" r="3.4" fill="#a5b4fc"/><circle cx="8" cy="0" r="3.4" fill="#a5b4fc"/><circle cx="16" cy="0" r="3.4" fill="#a5b4fc"/></g>
+  <g id="bioRingG" opacity="0">
+    <circle cx="0" cy="-6.5" r="3" fill="#4d7cfe"/><circle cx="6.2" cy="-2" r="3" fill="#4d7cfe"/><circle cx="3.8" cy="5.3" r="3" fill="#4d7cfe"/>
+    <circle cx="-3.8" cy="5.3" r="3" fill="#4d7cfe"/><circle cx="-6.2" cy="-2" r="3" fill="#4d7cfe"/>
+    <circle cx="9.5" cy="8" r="3" fill="#4d7cfe"/><circle cx="14" cy="10.5" r="3" fill="#4d7cfe"/>
+  </g>
+  <text id="bioLblA" x=525 y=514 text-anchor="middle" font-size="12.5" font-style="italic" fill="#64748b" opacity="0">AgrD product</text>
+  <text id="bioLblB" x=386 y=650 text-anchor="middle" font-size="12.5" font-style="italic" fill="#64748b" opacity="0">mature AIP-1</text>
+  </g><!-- /cellBlock -->
+
+  <!-- ================= THE POPULATION (left of cell) — up to eight cocci; split away from the cluster core as density(t) rises ================= -->
+  <circle id="mh0" cx=262 cy=545 r=44 fill="url(#aipGlow)"/><circle id="mh1" cx=200 cy=592 r=44 fill="url(#aipGlow)"/>
+  <circle id="mh2" cx=324 cy=592 r=44 fill="url(#aipGlow)"/><circle id="mh3" cx=228 cy=660 r=44 fill="url(#aipGlow)"/>
+  <circle id="mh4" cx=296 cy=660 r=44 fill="url(#aipGlow)"/><circle id="mh5" cx=262 cy=610 r=44 fill="url(#aipGlow)"/>
+  <circle id="mh6" cx=172 cy=532 r=44 fill="url(#aipGlow)"/><circle id="mh7" cx=340 cy=532 r=44 fill="url(#aipGlow)"/>
   <g id="m0"><circle r=28 fill="url(#miniGrad)" stroke="#fb923c" stroke-width="4"/></g>
   <g id="m1"><circle r=28 fill="url(#miniGrad)" stroke="#fb923c" stroke-width="4"/></g>
   <g id="m2"><circle r=28 fill="url(#miniGrad)" stroke="#fb923c" stroke-width="4"/></g>
@@ -142,36 +157,31 @@
   <g id="m5"><circle r=28 fill="url(#miniGrad)" stroke="#fb923c" stroke-width="4"/></g>
   <g id="m6"><circle r=28 fill="url(#miniGrad)" stroke="#fb923c" stroke-width="4"/></g>
   <g id="m7"><circle r=28 fill="url(#miniGrad)" stroke="#fb923c" stroke-width="4"/></g>
-  <text x=840 y=742 text-anchor="middle" font-size="12.5" fill="#94a3b8">the population</text>
+  <text x=262 y=712 text-anchor="middle" font-size="12.5" fill="#94a3b8">the population</text>
 
-  <!-- ================= SKIN COMMENSAL (right) — foreign AIP source; slides in for the invasion chapter ================= -->
+  <!-- ================= SKIN COMMENSAL (right) — foreign AIP source; slides in for the invasion chapter and divides into two daughters while it floods its red AIP ================= -->
   <g id="commG" opacity="0">
     <circle cx="1046" cy="592" r="60" fill="url(#commGrad)" stroke="#475569" stroke-width="3"/>
     <circle cx="1046" cy="592" r="46" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="5"/>
-    <text x="1046" y="678" text-anchor="middle" font-size="12.5" fill="#64748b">skin commensal</text>
+    <g id="commD1" opacity="0"><circle r="26" fill="url(#commGrad)" stroke="#475569" stroke-width="2.5"/><circle r="18" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="4"/></g>
+    <g id="commD2" opacity="0"><circle r="23" fill="url(#commGrad)" stroke="#475569" stroke-width="2.5"/><circle r="15" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="4"/></g>
+    <text x="1046" y="700" text-anchor="middle" font-size="12.5" fill="#64748b">skin commensal</text>
   </g>
 
-  <!-- ================= AIP BIOGENESIS (inside the main cell) — AgrD pro-peptide → AgrB matures + exports mature ring-AIP ================= -->
-  <g id="bioProG" opacity="0"><circle cx="-16" cy="0" r="3.4" fill="#a5b4fc"/><circle cx="-8" cy="0" r="3.4" fill="#a5b4fc"/><circle cx="0" cy="0" r="3.4" fill="#a5b4fc"/><circle cx="8" cy="0" r="3.4" fill="#a5b4fc"/><circle cx="16" cy="0" r="3.4" fill="#a5b4fc"/></g>
-  <g id="bioRingG" opacity="0">
-    <circle cx="0" cy="-6.5" r="3" fill="#4d7cfe"/><circle cx="6.2" cy="-2" r="3" fill="#4d7cfe"/><circle cx="3.8" cy="5.3" r="3" fill="#4d7cfe"/>
-    <circle cx="-3.8" cy="5.3" r="3" fill="#4d7cfe"/><circle cx="-6.2" cy="-2" r="3" fill="#4d7cfe"/>
-    <circle cx="9.5" cy="8" r="3" fill="#4d7cfe"/><circle cx="14" cy="10.5" r="3" fill="#4d7cfe"/>
-  </g>
-
-  <!-- ================= AMBIENT AIP FIELD — blue cognate (always) + red foreign (interference chapters) ================= -->
-  <g id="bd0"><circle r=8 fill="#4d7cfe"/><circle r=3 fill="#fff"/></g>
-  <g id="bd1"><circle r=8 fill="#4d7cfe"/><circle r=3 fill="#fff"/></g>
-  <g id="bd2"><circle r=8 fill="#4d7cfe"/><circle r=3 fill="#fff"/></g>
-  <g id="bd3"><circle r=8 fill="#4d7cfe"/><circle r=3 fill="#fff"/></g>
-  <g id="bd4"><circle r=8 fill="#4d7cfe"/><circle r=3 fill="#fff"/></g>
-  <g id="bd5"><circle r=8 fill="#4d7cfe"/><circle r=3 fill="#fff"/></g>
-  <g id="redG" opacity="0">
-    <g transform="translate(676,332)"><circle r=8.5 fill="#ef4444"/><circle r=3.2 fill="#fff"/></g>
-    <g transform="translate(770,480)"><circle r=8.5 fill="#ef4444"/><circle r=3.2 fill="#fff"/></g>
-    <g transform="translate(940,430)"><circle r=8.5 fill="#ef4444"/><circle r=3.2 fill="#fff"/></g>
-    <g transform="translate(1010,510)"><circle r=8.5 fill="#ef4444"/><circle r=3.2 fill="#fff"/></g>
-    <g transform="translate(1080,380)"><circle r=8.5 fill="#ef4444"/><circle r=3.2 fill="#fff"/></g>
+  <!-- ================= AMBIENT AIP FIELD — thiolactone ring glyphs: blue cognate (always) + red foreign (interference chapters) ================= -->
+  <g id="bd0" opacity="0"><use href="#agB"/></g>
+  <g id="bd1" opacity="0"><use href="#agB"/></g>
+  <g id="bd2" opacity="0"><use href="#agB"/></g>
+  <g id="bd3" opacity="0"><use href="#agB"/></g>
+  <g id="bd4" opacity="0"><use href="#agB"/></g>
+  <g id="bd5" opacity="0"><use href="#agB"/></g>
+  <!-- red field: each glyph is produced at the commensal and drifts out to its own target (JS-driven) -->
+  <g id="redG">
+    <g id="rd0" opacity="0"><use href="#agR"/></g>
+    <g id="rd1" opacity="0"><use href="#agR"/></g>
+    <g id="rd2" opacity="0"><use href="#agR"/></g>
+    <g id="rd3" opacity="0"><use href="#agR"/></g>
+    <g id="rd4" opacity="0"><use href="#agR"/></g>
   </g>
 
   <!-- ================= STATE CHIPS (clear band right of the cell, below the virulence curve) — three states: below threshold / quorum on / blocked-silent ================= -->
@@ -181,7 +191,7 @@
 
   <!-- ================= INSET A: AIP structure — thiolactone macrocycles (top-right, persistent; mirrors the deck's four-group figure) ================= -->
   <rect x=1200 y=192 width=330 height=188 rx=16 fill="#fff" opacity=".9" stroke="#c7d4ea"/>
-  <text x=1365 y=214 text-anchor="middle" font-size="15.5" font-weight="800" fill="#334155">AIP structure — thiolactone macrocycles</text>
+  <text x=1365 y=209 text-anchor="middle" font-size="15.5" font-weight="800" fill="#334155">AIP structure — thiolactone macrocycles</text>
   <text x=1285 y=224 text-anchor="middle" font-size="11" fill="#94a3b8">(cognate)</text>
   <text x=1460 y=224 text-anchor="middle" font-size="11" fill="#94a3b8">(non-cognate)</text>
   <!-- AIP-I (blue, cognate) -->
@@ -291,12 +301,12 @@
 
 const D = 48;                 // loop duration (s) — five ×9.6 s chapters, seamless: frame(D-eps) == frame(0)
 const CH = [0, 9.6, 19.2, 28.8, 38.4];   // chapter starts — SILENCE / GROWTH / QUORUM ON / INVASION→SILENT / RECOVERY & RESET
-const CAPTIONS = [            // one [titleLine, bodyLine] per chapter (<b> stage name, <i> gene/species names)
-  ["<b>SILENCE</b> — too few cells","A sparse culture: each cell makes its AIP-1 signal, but at low density the peptide is diluted below threshold, so <i>AgrC</i> stays unphosphorylated and the <i>P3</i> virulence genes remain off (red X)."],
-  ["<b>GROWTH &amp; ACCUMULATION</b> — as the culture grows","Cells divide and AIP-1 (blue) builds up in the shared medium until it crosses the threshold — the population is counting itself. <i>AgrC</i> hands a phosphate to <i>AgrA</i>, which fires <i>P3</i>."],
-  ["<b>QUORUM ON</b> — the autocatalytic loop","Active <i>AgrA~P</i> switches on the virulence genes at <i>P3</i> and re-switches on its own operon at <i>P2</i> — an autocatalytic loop. On X-gal plates, the P3-lacZ reporter turns blue."],
-  ["<b>INVASION → SILENT</b>","A skin commensal floods the medium with its own, non-cognate AIP (red — e.g. group II). It out-competes AIP-1 for <i>AgrC</i> and acts as an antagonist: even at high density the virulence genes stay off and the colonies stay colourless."],
-  ["<b>RECOVERY &amp; RESET</b>","When the foreign signal clears, cognate AIP-1 re-binds <i>AgrC</i> and the loop refires. Then dilution — growth into fresh medium — pushes AIP below threshold again: back to silence, exactly where we started."]
+const CAPTIONS = [            // one [titleLine, bodyLine] per chapter (numbered 1–5; <b> stage name, <i> gene/species names)
+  ["<b>1 · SILENCE</b> — too few cells","A sparse culture: each cell makes its AIP-1 signal, but at low density the peptide is diluted below threshold, so <i>AgrC</i> stays unphosphorylated and the <i>P3</i> virulence genes remain off (red X)."],
+  ["<b>2 · GROWTH &amp; ACCUMULATION</b> — as the culture grows","Cells divide on the left and AIP-1 (blue) builds up in the shared medium until it crosses the threshold — the population is counting itself. <i>AgrC</i> hands a phosphate to <i>AgrA</i>, which fires <i>P3</i>."],
+  ["<b>3 · QUORUM ON</b> — the autocatalytic loop","Active <i>AgrA~P</i> switches on the virulence genes at <i>P3</i> and re-switches on its own operon at <i>P2</i> — an autocatalytic loop. Inside the cell, <i>AgrD</i> makes a signal propeptide that <i>AgrB</i> cleaves and cyclises into mature AIP-1, which is exported to the medium. On X-gal plates, the P3-lacZ reporter turns blue."],
+  ["<b>4 · INVASION → SILENT</b>","A skin commensal grows in on the right and floods the medium with its own, non-cognate AIP (red — e.g. group II). It out-competes AIP-1 for <i>AgrC</i> and acts as an antagonist: even at high density the virulence genes stay off and the colonies stay colourless."],
+  ["<b>5 · RECOVERY &amp; RESET</b>","When the foreign signal clears, cognate AIP-1 re-binds <i>AgrC</i> and the loop refires. Then dilution — growth into fresh medium — pushes AIP below threshold again: back to silence, exactly where we started."]
 ];
 const LEGEND = [              // colour key — [fill, label] (X-gal blue is labelled inside its own inset)
   ["#4d7cfe","AIP-1 — cognate autoinducer"],
@@ -398,28 +408,41 @@ function render(t){
       $("bioRingG").setAttribute("transform", `translate(${(378-48*p).toFixed(2)},${(578+46*p).toFixed(2)}) scale(${(.5+.5*seg(q,.4,.55)).toFixed(3)})`); }
     else setOp($("bioRingG"), 0);
   } else { setOp($("bioProG"), 0); setOp($("bioRingG"), 0); }
+  const lblW = seg(bioVis,.35,.7)*.9;                                  // fade labels in/out with the biogenesis scene (no ghost at SILENCE, where bioVis≈0.12)
+  setOp($("bioLblA"), lblW); setOp($("bioLblB"), lblW);
 
-  /* population: cocci pop in/out with density; halos light up at quorum */
-  const MX=[840,778,902,806,874,840,755,925], MY=[548,598,598,664,664,614,537,537];
+  /* population (left of cell): cocci split away from the cluster core as density rises; halos light up at quorum */
+  const MX=[262,200,324,228,296,262,172,340], MY=[545,592,592,660,660,610,532,532];
+  const PCX=262, PCY=585;   // cluster core — new cocci drift outward from here while scaling in (division feel)
   for(let i=0;i<8;i++){
     const s=easeO(clamp((8*density-(i+.75))/.25,0,1));
-    $("m"+i).setAttribute("transform", `translate(${MX[i]},${MY[i]}) scale(${s.toFixed(3)})`);
+    const k=(1-s)*.45;
+    $("m"+i).setAttribute("transform", `translate(${(MX[i]-(MX[i]-PCX)*k).toFixed(2)},${(MY[i]-(MY[i]-PCY)*k).toFixed(2)}) scale(${s.toFixed(3)})`);
     setOp($("mh"+i), .5*on*s);
   }
 
-  /* skin commensal slides in for the invasion chapter, out again before the seam */
+  /* skin commensal slides in for the invasion chapter, divides into two daughters while it grows, out again before the seam */
   const cin=seg(t,29,31), cOut=seg(t,38.6,40.2);
   $("commG").setAttribute("transform", `translate(${((1-cin)*150+cOut*150).toFixed(2)},0)`);
   setOp($("commG"), Math.min(cin,1-cOut));
+  const d1=easeO(seg(t,31.6,33.4))*(1-cOut), d2=easeO(seg(t,32.6,34.6))*(1-cOut);   // daughters split away from the parent; scale back out on the exit window (pure fn of t → seam-safe)
+  setOp($("commD1"), d1); setOp($("commD2"), d2);
+  $("commD1").setAttribute("transform", `translate(${(1046-70*d1).toFixed(2)},${(592+38*d1).toFixed(2)}) scale(${d1.toFixed(3)})`);
+  $("commD2").setAttribute("transform", `translate(${(1046+62*d2).toFixed(2)},${(592+42*d2).toFixed(2)}) scale(${d2.toFixed(3)})`);
 
-  /* ambient AIP field: blue dots appear one-by-one as the gauge rises; red follows the foreign signal */
-  const BX=[150,240,330,560,690,120], BY=[470,350,700,706,650,600], PER=[8,12,6,8,12,6];  // all periods divide D=48 → seam-safe
+  /* ambient AIP field: blue ring glyphs appear one-by-one as the gauge rises; red ones are produced at the commensal and drift out (pure fn of red → seam-safe) */
+  const BX=[240,352,900,1120,690,985], BY=[330,428,724,724,700,290], PER=[8,12,6,8,12,6];  // all periods divide D=48 → seam-safe
   for(let i=0;i<6;i++){
     const a = 2*Math.PI*t/PER[i]*(i%2?-1:1);
-    $("bd"+i).setAttribute("transform", `translate(${(BX[i]+14*Math.cos(a)).toFixed(2)},${(BY[i]+14*Math.sin(a)).toFixed(2)})`);
+    $("bd"+i).setAttribute("transform", `translate(${(BX[i]+8*Math.cos(a)).toFixed(2)},${(BY[i]+8*Math.sin(a)).toFixed(2)})`);
     setOp($("bd"+i), easeIO(seg(blue, 9+i*13, 22+i*13)));
   }
-  setOp($("redG"), Math.min(1, red/95));
+  const RT0=[8,26,44,62,80], RX=[700,950,1150,770,1060], RY=[300,480,600,668,300];   // staggered production + field targets
+  for(let i=0;i<5;i++){
+    const p=easeIO(seg(red, RT0[i], RT0[i]+25));
+    $("rd"+i).setAttribute("transform", `translate(${(1046+(RX[i]-1046)*p).toFixed(2)},${(592+(RY[i]-592)*p).toFixed(2)})`);
+    setOp($("rd"+i), easeIO(seg(red, RT0[i], RT0[i]+12)));
+  }
 
   /* three-way state gating (chips + gauge states) — no garbled crossfade */
   const sB=clamp((redOcc-.3)/.4,0,1);
@@ -444,29 +467,31 @@ function render(t){
   S.t=t; S.chapter=ch;
   S.blue=+blue.toFixed(1); S.red=+red.toFixed(1); S.on=+on.toFixed(2); S.density=+density.toFixed(2);
   S.bound=bound; S.redOcc=+redOcc.toFixed(2); S.xgal = on>.5?1:0;
+  S.comm=+Math.max(d1,d2).toFixed(2);   // commensal daughter growth (seam-checked)
 }
 
 /* ---------- self-test (?test=1) — TOPIC: replace checks with assertions about YOUR scene, keep the seam block ---------- */
 function runSelfTest(){
   const checks=[
-    [4,     s=>s.chapter===0 && Math.abs(s.blue-15)<.5 && s.red<.5 && s.on<.02 && Math.abs(s.density-.35)<.02 && s.bound===0], // silence: below threshold (seam anchor)
+    [4,     s=>s.chapter===0 && Math.abs(s.blue-15)<.5 && s.red<.5 && s.on<.02 && Math.abs(s.density-.35)<.02 && s.bound===0 && s.comm<.01], // silence: below threshold (seam anchor)
     [13,    s=>s.chapter===1 && s.blue>25 && s.blue<60 && s.on<.1],              // growth: AIP accumulating toward the threshold
     [14,    s=>s.chapter===1 && s.blue>30 && s.bound>=2],                        // mid-growth: several AgrC sites occupied by cognate AIP
     [15,    s=>s.chapter===1 && s.blue>60 && s.on>.1 && s.on<.5],                // just crossed — quorum igniting
     [18.5,  s=>s.blue>84 && s.on>.99 && s.density>.99],                          // ignition complete: full density above threshold
     [24,    s=>s.chapter===2 && Math.abs(s.blue-85)<.5 && s.red<.5 && s.on>.99], // quorum on: autocatalytic plateau
+    [33.5,  s=>s.chapter===3 && s.comm>.9],                                      // invasion: commensal has divided (daughters grown in)
     [34.2,  s=>s.chapter===3 && s.red>90 && s.on<.05 && s.xgal===0],             // invaded: non-cognate AIP blocks AgrC — silent at high density
     [41,    s=>s.chapter===4 && s.red<30 && s.on<.1],                            // recovery: foreign signal washing out
     [43.6,  s=>s.on>.9 && Math.abs(s.blue-85)<2],                                // refired before the dilution beat
-    [47.8,  s=>Math.abs(s.blue-15)<.5 && s.red<.5 && s.on<.02 && Math.abs(s.density-.35)<.02 && s.bound===0] // reset: back to the opening state
+    [47.8,  s=>Math.abs(s.blue-15)<.5 && s.red<.5 && s.on<.02 && Math.abs(s.density-.35)<.02 && s.bound===0 && s.comm<.01] // reset: back to the opening state
   ];
   let ok=true; const fails=[];
   for(const [t,pred] of checks){ render(t); if(!pred(S)) {ok=false; fails.push(`t=${t}: state=${JSON.stringify(S)}`);} }
   /* seam: last frame ≈ first frame (visual state only) — snap() whatever the eye sees */
-  const snap = () => ({blue:S.blue, red:+S.red.toFixed(0), on:+S.on.toFixed(2), density:+S.density.toFixed(2), bound:S.bound, redOcc:+S.redOcc.toFixed(2), xgal:S.xgal});
+  const snap = () => ({blue:S.blue, red:+S.red.toFixed(0), on:+S.on.toFixed(2), density:+S.density.toFixed(2), bound:S.bound, redOcc:+S.redOcc.toFixed(2), xgal:S.xgal, comm:+S.comm.toFixed(2)});
   render(D-0.02); const a=snap();
   render(0.02);   const b=snap();
-  if(Math.abs(a.blue-b.blue)>1||Math.abs(a.red-b.red)>2||Math.abs(a.on-b.on)>.05||Math.abs(a.density-b.density)>.05||a.bound!==b.bound||Math.abs(a.redOcc-b.redOcc)>.05||a.xgal!==b.xgal){ ok=false; fails.push(`seam mismatch ${JSON.stringify({end:a,start:b})}`); }
+  if(Math.abs(a.blue-b.blue)>1||Math.abs(a.red-b.red)>2||Math.abs(a.on-b.on)>.05||Math.abs(a.density-b.density)>.05||a.bound!==b.bound||Math.abs(a.redOcc-b.redOcc)>.05||a.xgal!==b.xgal||Math.abs(a.comm-b.comm)>.05){ ok=false; fails.push(`seam mismatch ${JSON.stringify({end:a,start:b})}`); }
   document.body.dataset.selftest = ok?"PASS":"FAIL";
   $("badge").textContent = `self-test: ${ok?"PASS":"FAIL"}`+(fails.length? " — "+fails[0]:"");
   return {ok, fails};
