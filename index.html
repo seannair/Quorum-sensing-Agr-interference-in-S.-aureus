@@ -133,16 +133,16 @@
 
   <!-- agr operon COPY inside the cell (the chromosome) — compact mirror of the top band; dormant at all times, transcribed while quorum is on -->
   <g id="inOpG">
-    <line x1=450 y1=484 x2=606 y2=484 stroke="#b9c7de" stroke-width="5" stroke-linecap="round"/>
+    <line x1=420 y1=484 x2=606 y2=484 stroke="#b9c7de" stroke-width="6" stroke-linecap="round"/>
     <!-- locus order agrA → agrC → agrD → agrB, with P2 + P3 together after agrB (as in the top band) -->
-    <path d="M455,475 h19 l8,9 l-8,9 h-19 z" fill="#4d7cfe"/><text x=466 y=488 text-anchor="middle" font-size="9.5" font-style="italic" fill="#fff">agrA</text>
-    <path d="M489,475 h19 l8,9 l-8,9 h-19 z" fill="#4d7cfe"/><text x=500 y=488 text-anchor="middle" font-size="9.5" font-style="italic" fill="#fff">agrC</text>
-    <path d="M523,475 h19 l8,9 l-8,9 h-19 z" fill="#4d7cfe"/><text x=534 y=488 text-anchor="middle" font-size="9.5" font-style="italic" fill="#fff">agrD</text>
-    <path d="M557,475 h19 l8,9 l-8,9 h-19 z" fill="#4d7cfe"/><text x=568 y=488 text-anchor="middle" font-size="9.5" font-style="italic" fill="#fff">agrB</text>
-    <rect x=587 y=473 width=6 height=22 rx=2 fill="#f59e0b"/>
-    <rect x=598 y=473 width=6 height=22 rx=2 fill="#f59e0b"/><text x=595 y=470 text-anchor="middle" font-size="10" font-weight="800" fill="#b45309">P2 P3</text>
+    <path d="M430,471 h20 l12,13 l-12,13 h-20 z" fill="#4d7cfe"/><text x=446 y=489 text-anchor="middle" font-size="11" font-style="italic" fill="#fff">agrA</text>
+    <path d="M470,471 h20 l12,13 l-12,13 h-20 z" fill="#4d7cfe"/><text x=486 y=489 text-anchor="middle" font-size="11" font-style="italic" fill="#fff">agrC</text>
+    <path d="M510,471 h20 l12,13 l-12,13 h-20 z" fill="#4d7cfe"/><text x=526 y=489 text-anchor="middle" font-size="11" font-style="italic" fill="#fff">agrD</text>
+    <path d="M550,471 h20 l12,13 l-12,13 h-20 z" fill="#4d7cfe"/><text x=566 y=489 text-anchor="middle" font-size="11" font-style="italic" fill="#fff">agrB</text>
+    <rect x=590 y=469 width=6 height=30 rx=2 fill="#f59e0b"/>
+    <rect x=601 y=469 width=6 height=30 rx=2 fill="#f59e0b"/><text x=600 y=465 text-anchor="middle" font-size="10.5" font-weight="800" fill="#b45309">P2 P3</text>
   </g>
-  <path id="inTxPath" d="M596,468 H458" fill="none" stroke="#f59e0b" stroke-width="3" opacity="0"/>
+  <path id="inTxPath" d="M597,462 H430" fill="none" stroke="#f59e0b" stroke-width="3" opacity="0"/>
 
   <!-- phosphate hop: AgrC~P hands its phosphate to AgrA (pure fn of t, period 8 | D) -->
   <g id="phosHop" opacity="0"><circle r=6 fill="#fbbf24" stroke="#fff" stroke-width="1.5"/><text y=3 text-anchor="middle" font-size="9" font-weight="800" fill="#78350f">P</text></g>
@@ -184,12 +184,13 @@
   <g id="m7"><circle r=28 fill="url(#miniGrad)" stroke="#fb923c" stroke-width="4"/></g>
   <text x=262 y=712 text-anchor="middle" font-size="12.5" fill="#94a3b8">the population</text>
 
-  <!-- ================= SKIN COMMENSAL (right) — foreign AIP source; slides in for the invasion chapter and divides into two daughters while it floods its red AIP ================= -->
+  <!-- ================= SKIN COMMENSAL (right) — foreign AIP source; slides in for the invasion chapter, multiplies into three daughters first, then floods its red AIP ================= -->
   <g id="commG" opacity="0">
     <circle cx="1046" cy="592" r="60" fill="url(#commGrad)" stroke="#475569" stroke-width="3"/>
     <circle cx="1046" cy="592" r="46" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="5"/>
     <g id="commD1" opacity="0"><circle r="26" fill="url(#commGrad)" stroke="#475569" stroke-width="2.5"/><circle r="18" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="4"/></g>
     <g id="commD2" opacity="0"><circle r="23" fill="url(#commGrad)" stroke="#475569" stroke-width="2.5"/><circle r="15" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="4"/></g>
+    <g id="commD3" opacity="0"><circle r="20" fill="url(#commGrad)" stroke="#475569" stroke-width="2.5"/><circle r="13" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="4"/></g>
     <text x="1046" y="700" text-anchor="middle" font-size="12.5" fill="#64748b">skin commensal</text>
   </g>
 
@@ -389,11 +390,11 @@ function render(t){
   if(ch===0){ blue=15; red=0; on=0; density=.35; }                                                    // SILENCE: sparse culture below threshold
   else if(ch===1){ blue=15+70*easeIO(seg(t,9.6,18)); red=0; on=easeIO(seg(t,13.7,17.6)); density=.35+.65*easeIO(seg(t,9.6,17)); } // GROWTH → 85/0/1
   else if(ch===2){ blue=85; red=0; on=1; density=1; }                                                  // QUORUM ON: autocatalytic plateau
-  else if(ch===3){ blue=85-15*easeIO(seg(t,30,34)); red=95*easeIO(seg(t,29.5,33)); on=1-easeIO(seg(t,31.5,34)); density=1; } // INVASION → 70/95/0
+  else if(ch===3){ blue=85-15*easeIO(seg(t,30,34)); red=95*easeIO(seg(t,34,36.5)); on=1-easeIO(seg(t,34.5,36.5)); density=1; } // INVASION → 70/95/0 (foreign AIP ramps only AFTER the commensals have multiplied)
   else { const r=easeIO(seg(t,42,44)), d=easeIO(seg(t,45.6,47.6));                                     // RECOVERY & RESET: refire, then dilution home
     blue=70+15*r-70*d; red=95*(1-easeIO(seg(t,39.5,42))); on=r*(1-d); density=1-.65*easeIO(seg(t,45.2,47.4)); }
   const thrCross = Math.exp(-Math.pow((t-13.8)/0.5,2));   // gaussian flash as AIP crosses the threshold (~t=13.8)
-  const redOcc = seg(t,30.5,32.5)*(1-seg(t,40.5,42));     // foreign AIP occupancy of the AgrC site (seam-safe: 0 at t=0 and t=D)
+  const redOcc = seg(t,34,36)*(1-seg(t,40.5,42));         // foreign AIP occupancy of the AgrC site — tracks the delayed AIP ramp (seam-safe: 0 at t=0 and t=D)
 
   /* gene band stays constant brightness; virulence pill dims (0.35) when silent, lit (1.0) when quorum is on */
   const geneLit = .35+.65*on;
@@ -468,14 +469,15 @@ function render(t){
     setOp($("mh"+i), .5*on*s);
   }
 
-  /* skin commensal slides in for the invasion chapter, divides into two daughters while it grows, out again before the seam */
+  /* skin commensal slides in for the invasion chapter, multiplies (three daughters) first, then produces its foreign AIP; all out again before the seam */
   const cin=seg(t,29,31), cOut=seg(t,38.6,40.2);
   $("commG").setAttribute("transform", `translate(${((1-cin)*150+cOut*150).toFixed(2)},0)`);
   setOp($("commG"), Math.min(cin,1-cOut));
-  const d1=easeO(seg(t,31.6,33.4))*(1-cOut), d2=easeO(seg(t,32.6,34.6))*(1-cOut);   // daughters split away from the parent; scale back out on the exit window (pure fn of t → seam-safe)
-  setOp($("commD1"), d1); setOp($("commD2"), d2);
+  const d1=easeO(seg(t,30.6,32.4))*(1-cOut), d2=easeO(seg(t,31.4,33.2))*(1-cOut), d3=easeO(seg(t,32.2,34))*(1-cOut);   // three daughters split away from the parent — all grown by t=34, before any foreign AIP (pure fn of t → seam-safe)
+  setOp($("commD1"), d1); setOp($("commD2"), d2); setOp($("commD3"), d3);
   $("commD1").setAttribute("transform", `translate(${(1046-70*d1).toFixed(2)},${(592+38*d1).toFixed(2)}) scale(${d1.toFixed(3)})`);
   $("commD2").setAttribute("transform", `translate(${(1046+62*d2).toFixed(2)},${(592+42*d2).toFixed(2)}) scale(${d2.toFixed(3)})`);
+  $("commD3").setAttribute("transform", `translate(${(1046-8*d3).toFixed(2)},${(592-76*d3).toFixed(2)}) scale(${d3.toFixed(3)})`);
 
   /* ambient AIP field: blue ring glyphs appear one-by-one as the gauge rises; red ones are produced at the commensal and drift out (pure fn of red → seam-safe) */
   const BX=[240,352,900,1120,690,985], BY=[330,428,724,724,700,290], PER=[8,12,6,8,12,6];  // all periods divide D=48 → seam-safe
@@ -514,7 +516,7 @@ function render(t){
   S.t=t; S.chapter=ch;
   S.blue=+blue.toFixed(1); S.red=+red.toFixed(1); S.on=+on.toFixed(2); S.density=+density.toFixed(2);
   S.bound=bound; S.redOcc=+redOcc.toFixed(2); S.xgal = on>.5?1:0;
-  S.comm=+Math.max(d1,d2).toFixed(2);   // commensal daughter growth (seam-checked)
+  S.comm=+Math.max(d1,d2,d3).toFixed(2);   // commensal daughter growth (seam-checked)
   S.pro=pro;                            // in-cell AgrD-product copies visible (seam-checked)
   S.bind=+bnd.toFixed(2);               // AgrA~P docked at P2/P3 (1 = bound, seam-checked)
 }
@@ -528,8 +530,9 @@ function runSelfTest(){
     [15,    s=>s.chapter===1 && s.blue>60 && s.on>.1 && s.on<.5],                // just crossed — quorum igniting
     [18.5,  s=>s.blue>84 && s.on>.99 && s.density>.99],                          // ignition complete: full density above threshold
     [24,    s=>s.chapter===2 && Math.abs(s.blue-85)<.5 && s.red<.5 && s.on>.99 && s.pro>=3 && s.bind>.9], // quorum on: autocatalytic plateau + in-cell production + AgrA~P bound to P2/P3
-    [33.5,  s=>s.chapter===3 && s.comm>.9],                                      // invasion: commensal has divided (daughters grown in)
-    [34.2,  s=>s.chapter===3 && s.red>90 && s.on<.05 && s.xgal===0 && s.pro===0 && s.bind<.05], // invaded: non-cognate AIP blocks AgrC — silent at high density, production halted, AgrA unbound
+    [33.5,  s=>s.chapter===3 && s.comm>.9 && s.red<1],                           // invasion I: commensals have multiplied (three daughters) with NO foreign AIP yet
+    [35.2,  s=>s.chapter===3 && s.comm>0.99 && s.red>10 && s.red<70],            // invasion II: full four-cell cluster while the red AIP is ramping in
+    [36.8,  s=>s.chapter===3 && s.red>90 && s.on<.05 && s.xgal===0 && s.pro===0 && s.bind<.05], // invaded: non-cognate AIP blocks AgrC — silent at high density, production halted, AgrA unbound
     [41,    s=>s.chapter===4 && s.red<30 && s.on<.1],                            // recovery: foreign signal washing out
     [43.6,  s=>s.on>.9 && Math.abs(s.blue-85)<2],                                // refired before the dilution beat
     [47.8,  s=>Math.abs(s.blue-15)<.5 && s.red<.5 && s.on<.02 && Math.abs(s.density-.35)<.02 && s.bound===0 && s.comm<.01 && s.pro===0 && s.bind<.05] // reset: back to the opening state, AgrA unbound
