@@ -20,6 +20,8 @@
   .dot{ width:13px; height:13px; border-radius:50%; background:#c7d4ea; border:none; cursor:pointer; padding:0; transition:.2s; box-shadow:none; min-height:0; }
   .dot.active{ background:#f59e0b; transform:scale(1.28); }
   #speedWrap, #scrubWrap{ display:flex; align-items:center; gap:7px; color:#475569; font-size:13px; font-weight:600; }
+  /* fixed width + tabular digits: tVal updates every frame — without this the whole control bar reflows (jitters) as the text width oscillates */
+  #tVal{ min-width:48px; text-align:right; font-variant-numeric:tabular-nums; }
   input[type=range]{ -webkit-appearance:none; appearance:none; width:92px; height:5px; border-radius:3px; background:#c7d4ea; outline:none; }
   #scrub{ width:min(38vw,260px); }
   input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:#f59e0b; cursor:pointer; border:2.5px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.3); }
@@ -101,7 +103,7 @@
   <circle cx="480" cy="470" r=145 fill="none" stroke="#fff" stroke-opacity=".95" stroke-width="9"/>
   <ellipse cx="425" cy="412" rx=66 ry=30 transform="rotate(-28 425 412)" fill="#ffffff" opacity=".25"/>
 
-  <!-- AgrA response regulator (violet, small) — rests high in the cell; at quorum it travels to AgrC, gets phosphorylated there (badge), then docks under P2/P3 -->
+  <!-- AgrA response regulator (violet, small) — rests high in the cell; at quorum it travels INSIDE the cell to AgrC's cytoplasmic face (bottom-left corner of the receptor box), dwells there while phosphorylated (badge), then slides down and docks under P2/P3 -->
   <g id="agrx" transform="translate(425,418)">
     <circle r="13" fill="#8b5cf6"/>
     <text y="30" text-anchor="middle" font-size="12.5" font-weight="800" fill="#7c2d12">AgrA</text>
@@ -424,8 +426,8 @@ function render(t){
     if(q<.4){ const p=easeIO(q/.4); setOp($("bioProG"), bioVis*seg(q,0,.06)*(1-seg(q,.32,.4)));
       $("bioProG").setAttribute("transform", `translate(${(505-127*p).toFixed(2)},${(532+46*p).toFixed(2)}) rotate(160.1)`); }
     else setOp($("bioProG"), 0);
-    if(q>=.4 && q<.9){ const p=easeIO((q-.4)/.5); setOp($("bioRingG"), bioVis*seg(q,.4,.46)*(1-seg(q,.7,.9)));
-      $("bioRingG").setAttribute("transform", `translate(${(378-48*p).toFixed(2)},${(578+46*p).toFixed(2)}) scale(${(.5+.5*seg(q,.4,.55)).toFixed(3)})`); }
+    if(q>=.4 && q<.9){ const p=easeIO((q-.4)/.5); setOp($("bioRingG"), bioVis*seg(q,.4,.46)*(1-seg(q,.82,.9)));   // stays solid while crossing the membrane, dissolves only once out in the medium
+      $("bioRingG").setAttribute("transform", `translate(${(378-62*p).toFixed(2)},${(578+60*p).toFixed(2)}) scale(${(.5+.5*seg(q,.4,.55)).toFixed(3)})`); }   // end (316,638) = ~50px past the outer membrane
     else setOp($("bioRingG"), 0);
   } else { setOp($("bioProG"), 0); setOp($("bioRingG"), 0); }
   const lblW = seg(bioVis,.35,.7)*.9;                                  // fade labels in/out with the biogenesis scene (no ghost at SILENCE, where bioVis≈0.12)
@@ -436,17 +438,22 @@ function render(t){
   inTx.setAttribute("stroke-dasharray","9 7");
   inTx.setAttribute("stroke-dashoffset",(-(t*10%16)).toFixed(2));      // dash period 16 | D → seam-safe
   setOp(inTx, on*.85);
-  /* AgrA~P glyph — three-stage journey (pure fn of q=on·(1−redOcc) → reversible + seam-safe):
-     rest high in cell → travels to the AgrC receptor → phosphorylates there (badge appears) → docks under P2/P3; unbinds in reverse when blocked or diluted */
-  const q=on*(1-redOcc);
-  let ax,ay,aStage;
-  if(q<.45){ const p=easeIO(clamp(q/.45,0,1)); aStage=0; ax=425+(587-425)*p; ay=418+(328-418)*p; }    // rest(425,418) → AgrC receptor (587,328)
-  else if(q<.70){ aStage=1; ax=587; ay=328; }                                                          // at AgrC — phosphorylating
-  else { const p=easeIO(clamp((q-.70)/.30,0,1)); aStage=2; ax=587; ay=328+(510-328)*p; }               // → promoter dock (587,510) under P2/P3
+  /* AgrA~P glyph — slow three-stage journey, entirely INSIDE the cell (pure fn of t → seam-safe):
+     rest high in cell → travels to the cytoplasmic face of AgrC (bottom-left corner of the receptor box) →
+     dwells there while phosphorylated (badge appears) → slides down and docks under P2/P3.
+     Reverses in reverse order when foreign AIP blocks (ch3) or dilution resets (ch4). */
+  const R={x:425,y:418}, PH={x:562,y:412}, DK={x:587,y:510};   // rest / AgrC cytoplasmic face (well inside the inner membrane) / promoter dock under P2/P3
+  const eT1=easeIO(seg(t,14.5,17.6)), sD1=easeIO(seg(t,20.4,22.8));      // first ignition: travel → phosphorylation dwell → slide to dock (docked by t≈22.8)
+  const uS1=easeIO(seg(t,34.8,36.2)),  uR1=easeIO(seg(t,36.2,37.7));     // blocked: slide back → travel home (at rest by t≈37.7, SILENT)
+  const eT2=easeIO(seg(t,41.6,43.0)),  sD2=easeIO(seg(t,44.4,45.3));     // refire: travel → dwell → slide (docked by t≈45.3)
+  const uS2=easeIO(seg(t,45.8,46.6)),  uR2=easeIO(seg(t,46.6,47.5));     // dilution: slide back → travel home (at rest before the seam)
+  let ax=R.x, ay=R.y;
+  for(const [A,e] of [[PH,eT1],[DK,sD1],[PH,uS1],[R,uR1],[PH,eT2],[DK,sD2],[PH,uS2],[R,uR2]]){ ax+=(A.x-ax)*e; ay+=(A.y-ay)*e; }
+  const aStage = (t>=20.4&&t<34.8)||(t>=44.4&&t<45.8) ? 2 : ((t>=17.6&&t<20.4)||(t>=43&&t<44.4)) ? 1 : 0;   // 0 rest/travelling · 1 at AgrC (phosphorylating) · 2 docked/sliding to P2P3
   $("agrx").setAttribute("transform",`translate(${ax.toFixed(1)},${ay.toFixed(1)})`);
-  const phosV=clamp(seg(q,.32,.58),0,1);                       // phosphate appears as AgrA reaches the receptor and rides along to the promoter
+  const phosV=Math.max(seg(t,17.4,18)*(1-seg(t,36.1,37)), seg(t,42.9,43.5)*(1-seg(t,46.5,47.3)));   // badge appears at the phosphorylation dwell, lost on the way home
   setOp($("phosBadge"), phosV);
-  const bnd=easeIO(q);                                         // docked-ness (seam-checked)
+  const bnd=Math.max(sD1*(1-uS1), sD2*(1-uS2));    // docked-ness (seam-checked)
   const actVis=clamp((blue-40)/30,0,1)*(1-redOcc);                     // production rises with quorum activity, stops when blocked
   let pro=0;
   for(let i=0;i<4;i++){
@@ -477,12 +484,12 @@ function render(t){
   $("commD2").setAttribute("transform", `translate(${(1046+62*d2).toFixed(2)},${(592+42*d2).toFixed(2)}) scale(${d2.toFixed(3)})`);
   $("commD3").setAttribute("transform", `translate(${(1046-8*d3).toFixed(2)},${(592-76*d3).toFixed(2)}) scale(${d3.toFixed(3)})`);
 
-  /* ambient AIP field: blue ring glyphs appear one-by-one as the gauge rises; red ones are produced at the commensal and drift out (pure fn of red → seam-safe) */
-  const BX=[240,352,900,1120,690,985], BY=[330,428,724,724,700,290], PER=[8,12,6,8,12,6];  // all periods divide D=48 → seam-safe
+  /* ambient AIP field: blue glyphs are produced at the multiplying population and drift outward around it (mirrors the red field's commensal origin); both pure fn of their gauge → seam-safe */
+  const BT0=[8,22,36,50,64,78], BXt=[150,392,118,172,348,208], BYt=[468,352,640,745,690,478];   // staggered production + targets around the cluster (all clear of cell/pill/labels)
   for(let i=0;i<6;i++){
-    const a = 2*Math.PI*t/PER[i]*(i%2?-1:1);
-    $("bd"+i).setAttribute("transform", `translate(${(BX[i]+8*Math.cos(a)).toFixed(2)},${(BY[i]+8*Math.sin(a)).toFixed(2)})`);
-    setOp($("bd"+i), easeIO(seg(blue, 9+i*13, 22+i*13)));
+    const p=easeIO(seg(blue, BT0[i], BT0[i]+25));
+    $("bd"+i).setAttribute("transform", `translate(${(PCX+(BXt[i]-PCX)*p).toFixed(2)},${(PCY+(BYt[i]-PCY)*p).toFixed(2)})`);
+    setOp($("bd"+i), easeIO(seg(blue, BT0[i], BT0[i]+12)));
   }
   const RT0=[8,26,44,62,80], RX=[700,950,1150,770,1060], RY=[300,480,600,668,300];   // staggered production + field targets
   for(let i=0;i<5;i++){
@@ -517,7 +524,7 @@ function render(t){
   S.comm=+Math.max(d1,d2,d3).toFixed(2);   // commensal daughter growth (seam-checked)
   S.pro=pro;                            // in-cell AgrD-product copies visible (seam-checked)
   S.bind=+bnd.toFixed(2);               // AgrA~P docked at P2/P3 (1 = bound, seam-checked)
-  S.aStage=aStage;                      // 0 travelling to AgrC / 1 at AgrC (phosphorylating) / 2 docked at promoter (seam-checked)
+  S.aStage=aStage;                      // 0 resting/travelling inside the cell / 1 dwelling at AgrC's cytoplasmic face (phosphorylating) / 2 sliding to or docked under P2/P3 (seam-checked)
   S.phos=+phosV.toFixed(2);             // phosphate badge visible on AgrA (seam-checked)
 }
 
@@ -528,11 +535,11 @@ function runSelfTest(){
     [13,    s=>s.chapter===1 && s.blue>25 && s.blue<60 && s.on<.1],              // growth: AIP accumulating toward the threshold
     [14,    s=>s.chapter===1 && s.blue>30 && s.bound>=2],                        // mid-growth: several AgrC sites occupied by cognate AIP
     [15,    s=>s.chapter===1 && s.blue>60 && s.on>.1 && s.on<.5 && s.aStage===0],                // just crossed — quorum igniting, AgrA travelling to the receptor
-    [15.8,  s=>s.chapter===1 && s.aStage===1 && s.phos>.9],                                     // at the AgrC receptor — phosphorylated (P badge) before docking
-    [16.4,  s=>s.chapter===1 && s.aStage===2 && s.bind>.5],                                     // phosphorylated AgrA sliding down to dock under P2/P3
-    [18.5,  s=>s.blue>84 && s.on>.99 && s.density>.99],                          // ignition complete: full density above threshold
+    [15.8,  s=>s.chapter===1 && s.aStage===0 && s.phos<.1],                                     // mid-travel inside the cell toward AgrC's cytoplasmic face — no phosphate yet
+    [21.5,  s=>s.chapter===2 && s.aStage===2 && s.phos>.9],                                    // phosphorylated AgrA sliding down to dock under P2/P3 (docked by t≈22.8)
+    [18.5,  s=>s.blue>84 && s.on>.99 && s.density>.99 && s.aStage===1 && s.phos>.9],            // ignition complete + AgrA dwelling at the cytoplasmic face of AgrC, phosphorylated (P badge)
     [24,    s=>s.chapter===2 && Math.abs(s.blue-85)<.5 && s.red<.5 && s.on>.99 && s.pro>=3 && s.bind>.9 && s.aStage===2 && s.phos>.9], // quorum on: autocatalytic plateau + in-cell production + phosphorylated AgrA docked at P2/P3
-    [33.5,  s=>s.chapter===3 && s.comm>.9 && s.red<1],                           // invasion I: commensals have multiplied (three daughters) with NO foreign AIP yet
+    [33.5,  s=>s.chapter===3 && s.comm>.9 && s.red<1 && s.aStage===2 && s.bind>.9],            // invasion I: commensals have multiplied (three daughters) with NO foreign AIP yet; AgrA still docked at P2/P3
     [35.2,  s=>s.chapter===3 && s.comm>0.99 && s.red>10 && s.red<70],            // invasion II: full four-cell cluster while the red AIP is ramping in
     [36.8,  s=>s.chapter===3 && s.red>90 && s.on<.05 && s.xgal===0 && s.pro===0 && s.bind<.05 && s.aStage===0], // invaded: non-cognate AIP blocks AgrC — silent at high density, production halted, AgrA back at rest
     [41,    s=>s.chapter===4 && s.red<30 && s.on<.1],                            // recovery: foreign signal washing out
