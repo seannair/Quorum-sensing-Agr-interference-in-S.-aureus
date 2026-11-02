@@ -164,6 +164,9 @@
     <circle cx="-3.8" cy="5.3" r="3" fill="#4d7cfe"/><circle cx="-6.2" cy="-2" r="3" fill="#4d7cfe"/>
     <circle cx="9.5" cy="8" r="3" fill="#4d7cfe"/><circle cx="14" cy="10.5" r="3" fill="#4d7cfe"/>
   </g>
+  <!-- two more mature-AIP rings, phase-offset on the same 4.8 s cycle (JS-driven) so AgrB's export reads as a continuous stream diffusing out into the medium rather than one molecule that blinks and vanishes -->
+  <g id="bioRing2G" opacity="0"><use href="#agB"/></g>
+  <g id="bioRing3G" opacity="0"><use href="#agB"/></g>
   <text id="bioLblA" x=505 y=521 text-anchor="middle" font-size="12.5" font-style="italic" fill="#64748b" opacity="0">AgrD product</text>
   <text id="bioLblB" x=386 y=650 text-anchor="middle" font-size="12.5" font-style="italic" fill="#64748b" opacity="0">mature AIP-1</text>
   </g><!-- /cellBlock -->
@@ -200,6 +203,11 @@
   <g id="bd3" opacity="0"><use href="#agB"/></g>
   <g id="bd4" opacity="0"><use href="#agB"/></g>
   <g id="bd5" opacity="0"><use href="#agB"/></g>
+  <!-- bd6–9: four more cognate AIP-1 molecules, several secreted by individual small cells (JS-driven origins) so the field visibly builds up as the population grows -->
+  <g id="bd6" opacity="0"><use href="#agB"/></g>
+  <g id="bd7" opacity="0"><use href="#agB"/></g>
+  <g id="bd8" opacity="0"><use href="#agB"/></g>
+  <g id="bd9" opacity="0"><use href="#agB"/></g>
   <!-- red field: each glyph is produced at the commensal and drifts out to its own target (JS-driven) -->
   <g id="redG">
     <g id="rd0" opacity="0"><use href="#agR"/></g>
@@ -426,10 +434,16 @@ function render(t){
     if(q<.4){ const p=easeIO(q/.4); setOp($("bioProG"), bioVis*seg(q,0,.06)*(1-seg(q,.32,.4)));
       $("bioProG").setAttribute("transform", `translate(${(505-127*p).toFixed(2)},${(532+46*p).toFixed(2)}) rotate(160.1)`); }
     else setOp($("bioProG"), 0);
-    if(q>=.4 && q<.9){ const p=easeIO((q-.4)/.5); setOp($("bioRingG"), bioVis*seg(q,.4,.46)*(1-seg(q,.82,.9)));   // stays solid while crossing the membrane, dissolves only once out in the medium
-      $("bioRingG").setAttribute("transform", `translate(${(378-62*p).toFixed(2)},${(578+60*p).toFixed(2)}) scale(${(.5+.5*seg(q,.4,.55)).toFixed(3)})`); }   // end (316,638) = ~50px past the outer membrane
-    else setOp($("bioRingG"), 0);
-  } else { setOp($("bioProG"), 0); setOp($("bioRingG"), 0); }
+    // three phase-offset mature-AIP rings → a continuous stream diffusing OUT of AgrB into the medium (building up AIP-1) instead of one molecule that blinks and vanishes; same 4.8 s period (divides D=48) → seam-safe
+    const ringIds=["bioRingG","bioRing2G","bioRing3G"];
+    for(let k=0;k<3;k++){
+      const qk=((t/4.8 + k/3)%1+1)%1;   // phase-offset by a third of a cycle so several molecules are always in flight along the path at once
+      if(qk>.9){ setOp($(ringIds[k]), 0); continue; }
+      const p=easeIO(qk/.9);
+      $(ringIds[k]).setAttribute("transform", `translate(${(378-132*p).toFixed(2)},${(578+110*p).toFixed(2)}) scale(${(.5+.5*seg(qk,0,.2)).toFixed(3)})`);   // end (246,688) = deep in the medium, into the population's AIP-1 pool
+      setOp($(ringIds[k]), bioVis*seg(qk,0,.1)*(1-seg(qk,.86,.97)));   // solid through the whole outward journey; only a short fade once fully out in the medium
+    }
+  } else { setOp($("bioProG"), 0); for(const rid of ["bioRingG","bioRing2G","bioRing3G"]) setOp($(rid), 0); }
   const lblW = seg(bioVis,.35,.7)*.9;                                  // fade labels in/out with the biogenesis scene (no ghost at SILENCE, where bioVis≈0.12)
   setOp($("bioLblA"), lblW); setOp($("bioLblB"), lblW);
 
@@ -484,12 +498,17 @@ function render(t){
   $("commD2").setAttribute("transform", `translate(${(1046+62*d2).toFixed(2)},${(592+42*d2).toFixed(2)}) scale(${d2.toFixed(3)})`);
   $("commD3").setAttribute("transform", `translate(${(1046-8*d3).toFixed(2)},${(592-76*d3).toFixed(2)}) scale(${d3.toFixed(3)})`);
 
-  /* ambient AIP field: blue glyphs are produced at the multiplying population and drift outward around it (mirrors the red field's commensal origin); both pure fn of their gauge → seam-safe */
-  const BT0=[8,22,36,50,64,78], BXt=[150,392,118,172,348,208], BYt=[468,352,640,745,690,478];   // staggered production + targets around the cluster (all clear of cell/pill/labels)
-  for(let i=0;i<6;i++){
+  /* ambient AIP field — cognate AIP-1: each molecule is secreted by a small cell (or the shared pool) and diffuses outward into the medium; count & position are pure fn of `blue` → seam-safe. Ten molecules now (was six), several visibly leaving individual cocci, so the cloud builds up as the population grows */
+  const BOX=[262,200,172,262,296,340,228,324,262,262], BOY=[585,592,532,545,660,532,660,592,610,585];   // secretion origin: shared core / individual cocci centres
+  const BXT=[150,116,120,238,176,368,298,360,335,332], BYT=[470,632,548,462,708,560,740,632,700,486];      // drift targets in the open medium around the cluster (all x<375 → clear of the big cell; none over the "population" label)
+  const BT0=[4,12,20,28,36,44,52,60,68,76];   // staggered production so AIP-1 accumulates progressively as blue rises
+  let aip=0;
+  for(let i=0;i<10;i++){
     const p=easeIO(seg(blue, BT0[i], BT0[i]+25));
-    $("bd"+i).setAttribute("transform", `translate(${(PCX+(BXt[i]-PCX)*p).toFixed(2)},${(PCY+(BYt[i]-PCY)*p).toFixed(2)})`);
-    setOp($("bd"+i), easeIO(seg(blue, BT0[i], BT0[i]+12)));
+    $("bd"+i).setAttribute("transform", `translate(${(BOX[i]+(BXT[i]-BOX[i])*p).toFixed(2)},${(BOY[i]+(BYT[i]-BOY[i])*p).toFixed(2)})`);
+    const op=easeIO(seg(blue, BT0[i], BT0[i]+12));
+    if(op>.5) aip++;
+    setOp($("bd"+i), op);
   }
   const RT0=[8,26,44,62,80], RX=[700,950,1150,770,1060], RY=[300,480,600,668,300];   // staggered production + field targets
   for(let i=0;i<5;i++){
@@ -526,6 +545,7 @@ function render(t){
   S.bind=+bnd.toFixed(2);               // AgrA~P docked at P2/P3 (1 = bound, seam-checked)
   S.aStage=aStage;                      // 0 resting/travelling inside the cell / 1 dwelling at AgrC's cytoplasmic face (phosphorylating) / 2 sliding to or docked under P2/P3 (seam-checked)
   S.phos=+phosV.toFixed(2);             // phosphate badge visible on AgrA (seam-checked)
+  S.aip=aip;                            // cognate AIP-1 molecules currently in the medium (op>.5, seam-checked — "more AIP-1 produced")
 }
 
 /* ---------- self-test (?test=1) — TOPIC: replace checks with assertions about YOUR scene, keep the seam block ---------- */
@@ -538,7 +558,7 @@ function runSelfTest(){
     [15.8,  s=>s.chapter===1 && s.aStage===0 && s.phos<.1],                                     // mid-travel inside the cell toward AgrC's cytoplasmic face — no phosphate yet
     [21.5,  s=>s.chapter===2 && s.aStage===2 && s.phos>.9],                                    // phosphorylated AgrA sliding down to dock under P2/P3 (docked by t≈22.8)
     [18.5,  s=>s.blue>84 && s.on>.99 && s.density>.99 && s.aStage===1 && s.phos>.9],            // ignition complete + AgrA dwelling at the cytoplasmic face of AgrC, phosphorylated (P badge)
-    [24,    s=>s.chapter===2 && Math.abs(s.blue-85)<.5 && s.red<.5 && s.on>.99 && s.pro>=3 && s.bind>.9 && s.aStage===2 && s.phos>.9], // quorum on: autocatalytic plateau + in-cell production + phosphorylated AgrA docked at P2/P3
+    [24,    s=>s.chapter===2 && Math.abs(s.blue-85)<.5 && s.red<.5 && s.on>.99 && s.pro>=3 && s.bind>.9 && s.aStage===2 && s.phos>.9 && s.aip>=8], // quorum on: autocatalytic plateau + in-cell production + phosphorylated AgrA docked at P2/P3 + AIP-1 has built up in the medium (≥8 of 10 molecules, many from small cells)
     [33.5,  s=>s.chapter===3 && s.comm>.9 && s.red<1 && s.aStage===2 && s.bind>.9],            // invasion I: commensals have multiplied (three daughters) with NO foreign AIP yet; AgrA still docked at P2/P3
     [35.2,  s=>s.chapter===3 && s.comm>0.99 && s.red>10 && s.red<70],            // invasion II: full four-cell cluster while the red AIP is ramping in
     [36.8,  s=>s.chapter===3 && s.red>90 && s.on<.05 && s.xgal===0 && s.pro===0 && s.bind<.05 && s.aStage===0], // invaded: non-cognate AIP blocks AgrC — silent at high density, production halted, AgrA back at rest
@@ -549,10 +569,10 @@ function runSelfTest(){
   let ok=true; const fails=[];
   for(const [t,pred] of checks){ render(t); if(!pred(S)) {ok=false; fails.push(`t=${t}: state=${JSON.stringify(S)}`);} }
   /* seam: last frame ≈ first frame (visual state only) — snap() whatever the eye sees */
-  const snap = () => ({blue:S.blue, red:+S.red.toFixed(0), on:+S.on.toFixed(2), density:+S.density.toFixed(2), bound:S.bound, redOcc:+S.redOcc.toFixed(2), xgal:S.xgal, comm:+S.comm.toFixed(2), pro:S.pro, bind:+S.bind.toFixed(2), aStage:S.aStage, phos:+S.phos.toFixed(2)});
+  const snap = () => ({blue:S.blue, red:+S.red.toFixed(0), on:+S.on.toFixed(2), density:+S.density.toFixed(2), bound:S.bound, redOcc:+S.redOcc.toFixed(2), xgal:S.xgal, comm:+S.comm.toFixed(2), pro:S.pro, bind:+S.bind.toFixed(2), aStage:S.aStage, phos:+S.phos.toFixed(2), aip:S.aip});
   render(D-0.02); const a=snap();
   render(0.02);   const b=snap();
-  if(Math.abs(a.blue-b.blue)>1||Math.abs(a.red-b.red)>2||Math.abs(a.on-b.on)>.05||Math.abs(a.density-b.density)>.05||a.bound!==b.bound||Math.abs(a.redOcc-b.redOcc)>.05||a.xgal!==b.xgal||Math.abs(a.comm-b.comm)>.05||a.pro!==b.pro||Math.abs(a.bind-b.bind)>.05||a.aStage!==b.aStage||Math.abs(a.phos-b.phos)>.05){ ok=false; fails.push(`seam mismatch ${JSON.stringify({end:a,start:b})}`); }
+  if(Math.abs(a.blue-b.blue)>1||Math.abs(a.red-b.red)>2||Math.abs(a.on-b.on)>.05||Math.abs(a.density-b.density)>.05||a.bound!==b.bound||Math.abs(a.redOcc-b.redOcc)>.05||a.xgal!==b.xgal||Math.abs(a.comm-b.comm)>.05||a.pro!==b.pro||Math.abs(a.bind-b.bind)>.05||a.aStage!==b.aStage||Math.abs(a.phos-b.phos)>.05||a.aip!==b.aip){ ok=false; fails.push(`seam mismatch ${JSON.stringify({end:a,start:b})}`); }
   document.body.dataset.selftest = ok?"PASS":"FAIL";
   $("badge").textContent = `self-test: ${ok?"PASS":"FAIL"}`+(fails.length? " — "+fails[0]:"");
   return {ok, fails};
