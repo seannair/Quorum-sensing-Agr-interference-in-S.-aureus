@@ -70,27 +70,28 @@
 <g id="scene">
   <!-- ================= GENE BAND (top strip) — agrBDCA operon, P2 + P3 promoters ================= -->
   <line x1="100" y1="205" x2="1160" y2="205" stroke="#b9c7de" stroke-width="9" stroke-linecap="round"/>
-  <rect x="145" y="182" width="10" height="46" fill="#f59e0b"/>
-  <text x="150" y="176" font-size="13.5" font-weight="800" fill="#b45309">P2</text>
-  <!-- gene arrows: P→N, height 46 (y182..228), italic white labels centred -->
-  <g id="geneB"><path d="M180,182 h126 l54,23 l-54,23 h-126 z" fill="#4d7cfe"/><text x="270" y="212" text-anchor="middle" font-size="16.5" font-weight="700" font-style="italic" fill="#fff">agrB</text></g>
-  <g id="geneD"><path d="M380,182 h126 l54,23 l-54,23 h-126 z" fill="#4d7cfe"/><text x="470" y="212" text-anchor="middle" font-size="16.5" font-weight="700" font-style="italic" fill="#fff">agrD</text></g>
-  <g id="geneC"><path d="M620,182 h116 l48,23 l-48,23 h-116 z" fill="#4d7cfe"/><text x="705" y="212" text-anchor="middle" font-size="16.5" font-weight="700" font-style="italic" fill="#fff">agrC</text></g>
-  <g id="geneA"><path d="M810,182 h116 l48,23 l-48,23 h-116 z" fill="#4d7cfe"/><text x="895" y="212" text-anchor="middle" font-size="16.5" font-weight="700" font-style="italic" fill="#fff">agrA</text></g>
-  <rect x="1005" y="182" width="10" height="46" fill="#f59e0b"/>
-  <text x="1010" y="176" font-size="13.5" font-weight="800" fill="#b45309">P3</text>
-  <g id="viruPill"><rect x="1028" y="248" width="152" height="34" rx="17" fill="#dcfce7" stroke="#4ade80"/><text x="1104" y="270" text-anchor="middle" font-size="14.5" font-weight="800" fill="#15803d">P3 virulence</text></g>
-  <text id="viruSub" x="1100" y="302" text-anchor="middle" font-size="12.5" fill="#64748b">hla · PVL (lukSF-PV) · TSST-1</text>
+  <!-- gene arrows: P→N, height 46 (y182..228), italic white labels centred — locus order agrA → agrC → agrD → agrB -->
+  <g id="geneA"><path d="M170,182 h126 l54,23 l-54,23 h-126 z" fill="#4d7cfe"/><text x="260" y="212" text-anchor="middle" font-size="16.5" font-weight="700" font-style="italic" fill="#fff">agrA</text></g>
+  <g id="geneC"><path d="M364,182 h126 l54,23 l-54,23 h-126 z" fill="#4d7cfe"/><text x="454" y="212" text-anchor="middle" font-size="16.5" font-weight="700" font-style="italic" fill="#fff">agrC</text></g>
+  <g id="geneD"><path d="M558,182 h126 l54,23 l-54,23 h-126 z" fill="#4d7cfe"/><text x="648" y="212" text-anchor="middle" font-size="16.5" font-weight="700" font-style="italic" fill="#fff">agrD</text></g>
+  <g id="geneB"><path d="M752,182 h126 l54,23 l-54,23 h-126 z" fill="#4d7cfe"/><text x="842" y="212" text-anchor="middle" font-size="16.5" font-weight="700" font-style="italic" fill="#fff">agrB</text></g>
+  <!-- P2 and P3 sit together after agrB (divergent): P2→RNAII back across the operon, P3→virulence/RNAIII -->
+  <rect x="956" y="182" width="10" height="46" fill="#f59e0b"/>
+  <text x="961" y="176" font-size="13.5" font-weight="800" fill="#b45309">P2</text>
+  <rect x="985" y="182" width="10" height="46" fill="#f59e0b"/>
+  <text x="990" y="176" font-size="13.5" font-weight="800" fill="#b45309">P3</text>
+  <g id="viruPill"><rect x="1008" y="248" width="152" height="34" rx="17" fill="#dcfce7" stroke="#4ade80"/><text x="1084" y="270" text-anchor="middle" font-size="14.5" font-weight="800" fill="#15803d">P3 virulence</text></g>
+  <text id="viruSub" x="1080" y="302" text-anchor="middle" font-size="12.5" fill="#64748b">hla · PVL (lukSF-PV) · TSST-1</text>
   <!-- red X over the virulence genes when transcription is off — the deck's low-density motif -->
-  <g id="xMark"><line x1="952" y1="191" x2="980" y2="219" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/><line x1="980" y1="191" x2="952" y2="219" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/></g>
+  <g id="xMark"><line x1="1018" y1="191" x2="1046" y2="219" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/><line x1="1046" y1="191" x2="1018" y2="219" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/></g>
 
-  <!-- transcription flow: mRNA strand marching along the operon while quorum is on (marching dashes, IS256-style) -->
-  <path id="txPath" d="M150,163 H974" fill="none" stroke="#f59e0b" stroke-width="4.5" opacity="0"/>
-  <text id="txLbl" x=560 y=152 text-anchor="middle" font-size="13" font-style="italic" fill="#b45309" opacity="0">agrBDCA mRNA</text>
+  <!-- transcription flow: RNAII marching LEFTWARD from P2 across the operon while quorum is on (marching dashes) -->
+  <path id="txPath" d="M956,163 H176" fill="none" stroke="#f59e0b" stroke-width="4.5" opacity="0"/>
+  <text id="txLbl" x=556 y=152 text-anchor="middle" font-size="13" font-style="italic" fill="#b45309" opacity="0">agrBDCA mRNA</text>
 
   <!-- transcription arrows out of AgrA~P: autocatalytic loop back to P2, virulence path to P3 (starts follow the +60 cell shift) -->
-  <path id="loopPath" d="M496,424 C430,330 240,290 156,218" fill="none" stroke="#f59e0b" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="12 8"/>
-  <path id="viruPath" d="M508,420 C700,300 880,250 1008,216" fill="none" stroke="#f59e0b" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="12 8"/>
+  <path id="loopPath" d="M496,424 C600,330 820,270 961,219" fill="none" stroke="#f59e0b" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="12 8"/>
+  <path id="viruPath" d="M508,420 C660,320 880,255 990,217" fill="none" stroke="#f59e0b" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="12 8"/>
 
   <!-- ================= THE CELL (centre) — S. aureus with the agr circuit inside; whole block shifted +60 via group transform ================= -->
   <g id="cellBlock" transform="translate(60,0)">
@@ -100,10 +101,12 @@
   <circle cx="480" cy="470" r=145 fill="none" stroke="#fff" stroke-opacity=".95" stroke-width="9"/>
   <ellipse cx="425" cy="412" rx=66 ry=30 transform="rotate(-28 425 412)" fill="#ffffff" opacity=".25"/>
 
-  <!-- AgrA response regulator (violet); phosphate badge = active AgrA~P -->
-  <circle cx="430" cy="430" r=24 fill="#8b5cf6"/>
-  <text x="430" y="478" text-anchor="middle" font-size="15" font-weight="800" fill="#7c2d12">AgrA</text>
-  <g id="phosBadge"><circle cx="456" cy="404" r=11 fill="#fbbf24" stroke="#fff" stroke-width="2"/><text x="456" y="409" text-anchor="middle" font-size="12.5" font-weight="800" fill="#78350f">P</text></g>
+  <!-- AgrA response regulator (violet, small) — slides from rest to bind P2/P3 while quorum is active; phosphate badge = active AgrA~P -->
+  <g id="agrx" transform="translate(430,436)">
+    <circle r="13" fill="#8b5cf6"/>
+    <text y="30" text-anchor="middle" font-size="12.5" font-weight="800" fill="#7c2d12">AgrA</text>
+    <g id="phosBadge"><circle cx="9" cy="-11" r=8 fill="#fbbf24" stroke="#fff" stroke-width="2"/><text x="9" y="-7.5" text-anchor="middle" font-size="10" font-weight="800" fill="#78350f">P</text></g>
+  </g>
 
   <!-- AgrC receptor embedded in the membrane (donut = thiolactone macrocycle binding glyph) -->
   <rect x=554 y=323 width=74 height=72 rx=18 fill="#ede9fe"/>
@@ -130,15 +133,16 @@
 
   <!-- agr operon COPY inside the cell (the chromosome) — compact mirror of the top band; dormant at all times, transcribed while quorum is on -->
   <g id="inOpG">
-    <line x1=458 y1=484 x2=606 y2=484 stroke="#b9c7de" stroke-width="5" stroke-linecap="round"/>
-    <rect x=453 y=473 width=6 height=22 rx=2 fill="#f59e0b"/><text x=449 y=470 text-anchor="middle" font-size="10" font-weight="800" fill="#b45309">P2</text>
-    <path d="M463,475 h19 l8,9 l-8,9 h-19 z" fill="#4d7cfe"/><text x=474 y=488 text-anchor="middle" font-size="9.5" font-style="italic" fill="#fff">agrB</text>
-    <path d="M497,475 h19 l8,9 l-8,9 h-19 z" fill="#4d7cfe"/><text x=508 y=488 text-anchor="middle" font-size="9.5" font-style="italic" fill="#fff">agrD</text>
-    <path d="M531,475 h19 l8,9 l-8,9 h-19 z" fill="#4d7cfe"/><text x=542 y=488 text-anchor="middle" font-size="9.5" font-style="italic" fill="#fff">agrC</text>
-    <path d="M565,475 h19 l8,9 l-8,9 h-19 z" fill="#4d7cfe"/><text x=576 y=488 text-anchor="middle" font-size="9.5" font-style="italic" fill="#fff">agrA</text>
-    <rect x=596 y=473 width=6 height=22 rx=2 fill="#f59e0b"/><text x=611 y=470 text-anchor="middle" font-size="10" font-weight="800" fill="#b45309">P3</text>
+    <line x1=450 y1=484 x2=606 y2=484 stroke="#b9c7de" stroke-width="5" stroke-linecap="round"/>
+    <!-- locus order agrA → agrC → agrD → agrB, with P2 + P3 together after agrB (as in the top band) -->
+    <path d="M455,475 h19 l8,9 l-8,9 h-19 z" fill="#4d7cfe"/><text x=466 y=488 text-anchor="middle" font-size="9.5" font-style="italic" fill="#fff">agrA</text>
+    <path d="M489,475 h19 l8,9 l-8,9 h-19 z" fill="#4d7cfe"/><text x=500 y=488 text-anchor="middle" font-size="9.5" font-style="italic" fill="#fff">agrC</text>
+    <path d="M523,475 h19 l8,9 l-8,9 h-19 z" fill="#4d7cfe"/><text x=534 y=488 text-anchor="middle" font-size="9.5" font-style="italic" fill="#fff">agrD</text>
+    <path d="M557,475 h19 l8,9 l-8,9 h-19 z" fill="#4d7cfe"/><text x=568 y=488 text-anchor="middle" font-size="9.5" font-style="italic" fill="#fff">agrB</text>
+    <rect x=587 y=473 width=6 height=22 rx=2 fill="#f59e0b"/>
+    <rect x=598 y=473 width=6 height=22 rx=2 fill="#f59e0b"/><text x=595 y=470 text-anchor="middle" font-size="10" font-weight="800" fill="#b45309">P2 P3</text>
   </g>
-  <path id="inTxPath" d="M462,468 H598" fill="none" stroke="#f59e0b" stroke-width="3" opacity="0"/>
+  <path id="inTxPath" d="M596,468 H458" fill="none" stroke="#f59e0b" stroke-width="3" opacity="0"/>
 
   <!-- phosphate hop: AgrC~P hands its phosphate to AgrA (pure fn of t, period 8 | D) -->
   <g id="phosHop" opacity="0"><circle r=6 fill="#fbbf24" stroke="#fff" stroke-width="1.5"/><text y=3 text-anchor="middle" font-size="9" font-weight="800" fill="#78350f">P</text></g>
@@ -437,8 +441,12 @@ function render(t){
   inTx.setAttribute("stroke-dasharray","9 7");
   inTx.setAttribute("stroke-dashoffset",(-(t*10%16)).toFixed(2));      // dash period 16 | D → seam-safe
   setOp(inTx, on*.85);
+  /* AgrA~P glyph — small regulator; slides from rest to bind P2/P3 while quorum is active, unbinds when blocked or diluted (pure fn of scalars → seam-safe) */
+  const bnd=easeIO(on*(1-redOcc)), bu=1-bnd;
+  const ax=bu*bu*430+2*bu*bnd*485+bnd*bnd*592, ay=bu*bu*436+2*bu*bnd*525+bnd*bnd*507;   // quadratic bezier rest(430,436)→ctrl(485,525)→dock(592,507)
+  $("agrx").setAttribute("transform",`translate(${ax.toFixed(1)},${ay.toFixed(1)})`);
   const hp=easeIO(t/8%1);                                              // hop phase (period 8 | D)
-  $("phosHop").setAttribute("transform",`translate(${(614+(430-614)*hp).toFixed(2)},${(336+(430-336)*hp).toFixed(2)})`);
+  $("phosHop").setAttribute("transform",`translate(${(614+(ax-614)*hp).toFixed(2)},${(336+(ay-336)*hp).toFixed(2)})`);
   setOp($("phosHop"), on*(1-redOcc));
   const actVis=clamp((blue-40)/30,0,1)*(1-redOcc);                     // production rises with quorum activity, stops when blocked
   let pro=0;
@@ -508,30 +516,31 @@ function render(t){
   S.bound=bound; S.redOcc=+redOcc.toFixed(2); S.xgal = on>.5?1:0;
   S.comm=+Math.max(d1,d2).toFixed(2);   // commensal daughter growth (seam-checked)
   S.pro=pro;                            // in-cell AgrD-product copies visible (seam-checked)
+  S.bind=+bnd.toFixed(2);               // AgrA~P docked at P2/P3 (1 = bound, seam-checked)
 }
 
 /* ---------- self-test (?test=1) — TOPIC: replace checks with assertions about YOUR scene, keep the seam block ---------- */
 function runSelfTest(){
   const checks=[
-    [4,     s=>s.chapter===0 && Math.abs(s.blue-15)<.5 && s.red<.5 && s.on<.02 && Math.abs(s.density-.35)<.02 && s.bound===0 && s.comm<.01 && s.pro===0], // silence: below threshold (seam anchor), no in-cell production
+    [4,     s=>s.chapter===0 && Math.abs(s.blue-15)<.5 && s.red<.5 && s.on<.02 && Math.abs(s.density-.35)<.02 && s.bound===0 && s.comm<.01 && s.pro===0 && s.bind<.05], // silence: below threshold (seam anchor), no in-cell production, AgrA unbound
     [13,    s=>s.chapter===1 && s.blue>25 && s.blue<60 && s.on<.1],              // growth: AIP accumulating toward the threshold
     [14,    s=>s.chapter===1 && s.blue>30 && s.bound>=2],                        // mid-growth: several AgrC sites occupied by cognate AIP
     [15,    s=>s.chapter===1 && s.blue>60 && s.on>.1 && s.on<.5],                // just crossed — quorum igniting
     [18.5,  s=>s.blue>84 && s.on>.99 && s.density>.99],                          // ignition complete: full density above threshold
-    [24,    s=>s.chapter===2 && Math.abs(s.blue-85)<.5 && s.red<.5 && s.on>.99 && s.pro>=3], // quorum on: autocatalytic plateau + in-cell production visible
+    [24,    s=>s.chapter===2 && Math.abs(s.blue-85)<.5 && s.red<.5 && s.on>.99 && s.pro>=3 && s.bind>.9], // quorum on: autocatalytic plateau + in-cell production + AgrA~P bound to P2/P3
     [33.5,  s=>s.chapter===3 && s.comm>.9],                                      // invasion: commensal has divided (daughters grown in)
-    [34.2,  s=>s.chapter===3 && s.red>90 && s.on<.05 && s.xgal===0 && s.pro===0], // invaded: non-cognate AIP blocks AgrC — silent at high density, production halted
+    [34.2,  s=>s.chapter===3 && s.red>90 && s.on<.05 && s.xgal===0 && s.pro===0 && s.bind<.05], // invaded: non-cognate AIP blocks AgrC — silent at high density, production halted, AgrA unbound
     [41,    s=>s.chapter===4 && s.red<30 && s.on<.1],                            // recovery: foreign signal washing out
     [43.6,  s=>s.on>.9 && Math.abs(s.blue-85)<2],                                // refired before the dilution beat
-    [47.8,  s=>Math.abs(s.blue-15)<.5 && s.red<.5 && s.on<.02 && Math.abs(s.density-.35)<.02 && s.bound===0 && s.comm<.01 && s.pro===0] // reset: back to the opening state
+    [47.8,  s=>Math.abs(s.blue-15)<.5 && s.red<.5 && s.on<.02 && Math.abs(s.density-.35)<.02 && s.bound===0 && s.comm<.01 && s.pro===0 && s.bind<.05] // reset: back to the opening state, AgrA unbound
   ];
   let ok=true; const fails=[];
   for(const [t,pred] of checks){ render(t); if(!pred(S)) {ok=false; fails.push(`t=${t}: state=${JSON.stringify(S)}`);} }
   /* seam: last frame ≈ first frame (visual state only) — snap() whatever the eye sees */
-  const snap = () => ({blue:S.blue, red:+S.red.toFixed(0), on:+S.on.toFixed(2), density:+S.density.toFixed(2), bound:S.bound, redOcc:+S.redOcc.toFixed(2), xgal:S.xgal, comm:+S.comm.toFixed(2), pro:S.pro});
+  const snap = () => ({blue:S.blue, red:+S.red.toFixed(0), on:+S.on.toFixed(2), density:+S.density.toFixed(2), bound:S.bound, redOcc:+S.redOcc.toFixed(2), xgal:S.xgal, comm:+S.comm.toFixed(2), pro:S.pro, bind:+S.bind.toFixed(2)});
   render(D-0.02); const a=snap();
   render(0.02);   const b=snap();
-  if(Math.abs(a.blue-b.blue)>1||Math.abs(a.red-b.red)>2||Math.abs(a.on-b.on)>.05||Math.abs(a.density-b.density)>.05||a.bound!==b.bound||Math.abs(a.redOcc-b.redOcc)>.05||a.xgal!==b.xgal||Math.abs(a.comm-b.comm)>.05||a.pro!==b.pro){ ok=false; fails.push(`seam mismatch ${JSON.stringify({end:a,start:b})}`); }
+  if(Math.abs(a.blue-b.blue)>1||Math.abs(a.red-b.red)>2||Math.abs(a.on-b.on)>.05||Math.abs(a.density-b.density)>.05||a.bound!==b.bound||Math.abs(a.redOcc-b.redOcc)>.05||a.xgal!==b.xgal||Math.abs(a.comm-b.comm)>.05||a.pro!==b.pro||Math.abs(a.bind-b.bind)>.05){ ok=false; fails.push(`seam mismatch ${JSON.stringify({end:a,start:b})}`); }
   document.body.dataset.selftest = ok?"PASS":"FAIL";
   $("badge").textContent = `self-test: ${ok?"PASS":"FAIL"}`+(fails.length? " — "+fails[0]:"");
   return {ok, fails};
