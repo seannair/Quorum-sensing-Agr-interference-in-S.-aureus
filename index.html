@@ -30,7 +30,8 @@
   #progBar{ height:100%; width:0%; background:linear-gradient(90deg,#f59e0b,#fb7185); }
   body.render-mode #ui, body.render-mode #prog{ display:none; }
   /* chapter caption — HTML pill so it keeps a fixed CSS-px size at any window (scaled SVG text was illegible on phones and overlapped the control bar) */
-  #capPill{ position:fixed; left:max(12px, env(safe-area-inset-left)); bottom:calc(20px + env(safe-area-inset-bottom)); z-index:4; max-width:min(592px, calc(100vw - 32px));
+  /* z-index above #ui (5) and #prog (6): the full-width control-bar gradient strip must not wash over the pill's bottom edge on desktop */
+  #capPill{ position:fixed; left:max(12px, env(safe-area-inset-left)); bottom:calc(20px + env(safe-area-inset-bottom)); z-index:7; max-width:min(592px, calc(100vw - 32px));
        background:#fff; border:1px solid #c7d4ea; border-radius:14px; box-shadow:0 2px 8px rgba(15,23,42,.10); padding:9px 16px; font-size:15px; line-height:1.45; color:#0f172a; pointer-events:none; }
   @media (max-width:560px){ #capPill{ bottom:calc(120px + env(safe-area-inset-bottom)); font-size:14px; max-width:calc(100vw - 32px); } }
 </style>
