@@ -14,6 +14,20 @@
   @page{ size:A4; margin:15mm 16mm; }
 
   .wrap{ max-width:none; }
+
+  /* Screen: centre the sheet so it fits a desktop window without stretching */
+  @media screen{
+    body{ background:#eef2f7; }
+    .wrap{ max-width:960px; margin:34px auto; padding:10px 30px 58px; background:#fff; border-radius:10px; box-shadow:0 1px 10px rgba(30,41,59,.14); }
+    .qbox{ cursor:pointer; }
+    .qbox:hover{ border-color:#b6c6dd; }
+    .qbox .ans{ display:none; }
+    .qbox.open .ans{ display:block; }
+  }
+  @media print{ .reveal-hint{ display:none; } }
+
+  /* Reveal-on-click answer block (screen hidden by default via the media query above; always visible in print) */
+  .qbox .ans{ margin-top:9px; padding-top:8px; border-top:1px dashed var(--line); color:#243b53; }
   h1{ font-size:21pt; letter-spacing:-.3px; margin-bottom:4px; }
   h2{ font-size:13.5pt; margin:20px 0 8px; padding-top:10px; border-top:2px solid var(--line); page-break-after:avoid; }
   h2 .num{ display:inline-block; min-width:24px; color:var(--blue); font-weight:800; }
@@ -45,8 +59,6 @@
 
   .qbox{ border:1px solid var(--line); border-radius:8px; padding:9px 12px; margin:8px 0; page-break-inside:avoid; background:#fff; }
   .qbox .qn{ font-weight:800; color:var(--blue); }
-  .ans h3{ color:var(--green); margin-top:14px; }
-  ol.anslist li{ margin:5px 0; page-break-inside:avoid; }
 
   .refs p{ font-size:9pt; margin:3px 0; }
   a{ color:#2563eb; text-decoration:none; word-break:break-all; }
@@ -66,7 +78,7 @@
   </div>
 </div>
 
-<p><b>How to use this guide.</b> Watch the animation once in full, then read each section below while scrubbing back to the matching chapter (the five dots under the play button jump straight to a chapter; <code>?t=seconds</code> in the URL freezes any frame). The questions at the end test exactly what the film shows — answers are given after them. Where the animation takes teaching liberties, they are flagged openly so you do not mistake them for scale.</p>
+<p><b>How to use this guide.</b> Watch the animation once in full, then read each section below while scrubbing back to the matching chapter (the five dots under the play button jump straight to a chapter; <code>?t=seconds</code> in the URL freezes any frame). The questions at the end test exactly what the film shows — try each one before clicking it open for its answer. Where the animation takes teaching liberties, they are flagged openly so you do not mistake them for scale.</p>
 
 <!-- ============ 1 CHAPTER MAP ============ -->
 <h2><span class="num">1</span>The five-chapter loop at a glance</h2>
@@ -165,6 +177,8 @@
   <li><b>Above threshold (autocatalysis):</b> AgrA~P re-switches on its own operon at P2, so more receptor and signal are made; quorum reinforces itself until concentration falls again.</li>
 </ul>
 
+<div class="callout amber"><b>How this compares with Gram-negative systems.</b> In the better-studied Gram-negative examples (for instance <i>Vibrio fischeri</i>, the classic model), the autoinducer is a small lactone — an acyl-homoserine lactone, or AHL — that simply diffuses back into cells and switches on its own genes. Staphylococci take a different route: their signal is a processed <b>peptide</b>, and detection requires the dedicated membrane receptor AgrC with phosphotransfer to AgrA — the two-component system in Figure B. Same population-counting logic, different chemistry and machinery.</div>
+
 <!-- ============ 3 VIRULENCE OUTPUT ============ -->
 <h2><span class="num">3</span>The output: what "QUORUM ON" actually turns on</h2>
 <p>P3 drives a regulon centred on the regulatory RNA <b>RNAIII</b>, which in turn activates virulence factors and represses protective ones. Two exotoxins named in the animation are real, Agr-dependent proteins:</p>
@@ -172,6 +186,7 @@
   <li><b>PVL (leucocidin)</b> / lukSF-PV — kills neutrophils.</li>
   <li><b>TSST-1</b> (toxic shock syndrome toxin-1) / C3 — superantigens behind toxic-shock physiology.</li>
 </ul>
+<p>In many other species, the quorum output is not virulence but <b>biofilm formation</b> — dense, surface-attached communities that resist antibiotics and disinfectants. The film focuses on the virulence branch because it is what makes the <i>S. aureus</i> story clinically relevant; the counting logic itself (Section 2) is shared with those biofilm-building systems.</p>
 <p><b>A note before reading the dish:</b> <i>Staphylococcus</i> does <u>not</u> normally make β-galactosidase — that enzyme belongs to <i>E. coli</i> (the <i>lacZ</i> gene) — and no wild staphylococcal strain carries RNAIII fused to <i>lacZ</i>. The blue dish in the film shows an <b>engineered reporter strain</b>: researchers inserted a copy of <i>lacZ</i> under control of the Agr-dependent P3 promoter (for example, strain SH101F7, where the reporter sits at the RNAIII locus as an RNAIII::<i>lacZ</i> fusion). The cell therefore makes β-galactosidase only when quorum has switched P3 on. On plates containing X-gal — a colourless galactose derivative that β-galactosidase cleaves into an insoluble blue product — colonies with active quorum turn blue; colonies with the switch off stay colourless. So in the film, <b>blue = quorum ON; colourless = off</b>, whether from low density or from interference. That ambiguity is itself a teaching point: the readout reports switch state, not cause.</p>
 
 <div class="callout"><b>Why this reporter was built (Canovas et al. 2016, Fig 1).</b> The P3-<i>lacZ</i> construct is a screening tool for finding <b>skin commensals that block <i>S. aureus</i> quorum sensing</b>. The reporter strain is streaked on a plate and a candidate skin bacterium is spread beside it as a lawn. Colonies far from the lawn turn blue — their quorum works normally. But if the commensal secretes an interfering AIP or some other molecule that blocks staphylococcal quorum sensing, the reporter colonies growing near it stay <b>colourless even at high density</b>: P3 was never switched on, so no β-galactosidase is made. Colourless does not mean dead or sick — it means P3 is off. Commensals whose secretions silence staphylococcal quorum are identified precisely by this colourless halo.</div>
@@ -223,30 +238,27 @@
 
 <!-- ============ 7 QUESTIONS ============ -->
 <h2><span class="num">7</span>Check your understanding</h2>
-<div class="qbox"><span class="qn">Q1.</span> Why does AIP-1 accumulate only when the population is dense, even though every cell — sparse or crowded — is making it?</div>
-<div class="qbox"><span class="qn">Q2.</span> What structural feature makes AIP-1 biologically active, and which protein creates it? Why are maturation and export described as one coupled event?</div>
-<div class="qbox"><span class="qn">Q3.</span> Name the four proteins of the <i>agr</i> locus shown on screen and state what P2 versus P3 each control.</div>
-<div class="qbox"><span class="qn">Q4.</span> Which molecule actually acts as the transcription factor, and in which chemical form?</div>
-<div class="qbox"><span class="qn">Q5.</span> Why is the <i>agr</i> circuit called an "autocatalytic loop"? What keeps it from running away indefinitely?</div>
-<div class="qbox"><span class="qn">Q6.</span> On a P3-lacZ / X-gal plate, what does blue report — and why can't the colour alone tell you <i>why</i> the switch is on or off?</div>
-<div class="qbox"><span class="qn">Q7.</span> A skin commensal floods the medium with group II AIP while a dense group I culture sits beside it. Predict the X-gal colour of the <i>S. aureus</i> colonies, and explain at the level of AgrC–AgrA why that happens despite high density.</div>
-<div class="qbox"><span class="qn">Q8.</span> List the four AIP groups with their approximate shares among clinical isolates, and give the sequences of AIP-1 and AIP-4. What is the single-residue difference?</div>
-<div class="qbox"><span class="qn">Q9.</span> After the foreign signal washes out, why do the colonies turn blue again without any new gene being made?</div>
-<div class="qbox"><span class="qn">Q10.</span> In chapter 5, dilution by growth into fresh medium resets quorum. Explain why dilution — not cell death — is what matters here.</div>
-
-<h3 class="ans" style="page-break-before:always;">Answers</h3>
-<ol class="anslist">
-  <li><b>A1.</b> AIP-1 is secreted into the shared medium, so its concentration scales with cell number per unit volume. When sparse it diffuses away and stays below threshold; as divisions add producers (and each daughter inherits production), the cumulative concentration crosses threshold and flips AgrC–AgrA on.</li>
-  <li><b>A2.</b> The Cys⁴–Met⁸ thiolactone ring — essential for receptor activity. <i>AgrB</i>, a transmembrane cysteine endopeptidase, cleaves the ~45-residue AgrD propeptide and cyclises it; that same step gates export through the membrane, so mature AIP-1 appears directly extracellularly.</li>
-  <li><b>A3.</b> <i>agrA</i> (response regulator), <i>agrC</i> (receptor/histidine kinase), <i>agrD</i> (signal propeptide) and <i>agrb</i> (maturation/export endopeptidase). P2 drives transcription of the signal genes themselves (autocatalysis); P3 drives virulence genes including RNAIII.</li>
-  <li><b>A4.</b> AgrA, only in its phosphorylated form (AgrA~P), after phosphotransfer from AIP-1-bound AgrC.</li>
-  <li><b>A5.</b> Because the output — more receptor and more signal production at P2 — amplifies the input, a positive-feedback loop. It stops when concentration falls: dilution by growth into fresh medium (or loss of cells) drops AIP below threshold and the switch reverses; nothing is permanently "on".</li>
-  <li><b>A6.</b> Blue means P3 is active, read out through an <b>introduced reporter</b>: staphylococci do not natively make β-galactosidase — in these strains it comes from a copy of <i>lacZ</i> inserted under P3 control. The colour cannot distinguish quorum-on-from-density (chapter 3) from re-firing after recovery — and it reads identically colourless for "too few cells" vs "interfered", so the cause needs other evidence.</li>
-  <li><b>A7.</b> Colourless. Group II AIP binds group I AgrC as a competitive antagonist: occupancy without phosphotransfer, plus displacement of cognate AIP-1 — so AgrA is never phosphorylated and P3 stays off even though the culture is dense. Interference is antagonism, not lysis.</li>
-  <li><b>A8.</b> I ≈ 60 %, II ≈ 22 %, III ≈ 14 %, IV ≈ 2.5 %. AIP-1 = YSTCDFIM; AIP-4 = YSTCYFIM — one ring residue, Cys⁶→Tyr (position 6).</li>
-  <li><b>A9.</b> The system is fully reversible: the <i>agr</i> machinery was never destroyed, only out-competed at the receptor. When foreign AIP clears, cognate AIP-1 re-binds AgrC, phosphotransfer resumes, and the still-intact autocatalytic loop refires.</li>
-  <li><b>A10.</b> Quorum tracks concentration in the shared medium. Growth into fresh volume lowers AIP per unit volume below threshold even though every cell is alive and producing — so AgrC dephosphorylates, P3 switches off, and the population returns to the silent state of chapter 1 (the film's seam).</li>
-</ol>
+<p class="small reveal-hint">Click any question (or press Enter on it) to reveal its answer. The printed / PDF version shows every answer directly under its question.</p>
+<div class="qbox"><span class="qn">Q1.</span> Why does AIP-1 accumulate only when the population is dense, even though every cell — sparse or crowded — is making it?
+  <div class="ans"><b>A1.</b> AIP-1 is secreted into the shared medium, so its concentration scales with cell number per unit volume. When sparse it diffuses away and stays below threshold; as divisions add producers (and each daughter inherits production), the cumulative concentration crosses threshold and flips AgrC–AgrA on.</div></div>
+<div class="qbox"><span class="qn">Q2.</span> What structural feature makes AIP-1 biologically active, and which protein creates it? Why are maturation and export described as one coupled event?
+  <div class="ans"><b>A2.</b> The Cys⁴–Met⁸ thiolactone ring — essential for receptor activity. <i>AgrB</i>, a transmembrane cysteine endopeptidase, cleaves the ~45-residue AgrD propeptide and cyclises it; that same step gates export through the membrane, so mature AIP-1 appears directly extracellularly.</div></div>
+<div class="qbox"><span class="qn">Q3.</span> Name the four proteins of the <i>agr</i> locus shown on screen and state what P2 versus P3 each control.
+  <div class="ans"><b>A3.</b> <i>agrA</i> (response regulator), <i>agrC</i> (receptor/histidine kinase), <i>agrD</i> (signal propeptide) and <i>agrb</i> (maturation/export endopeptidase). P2 drives transcription of the signal genes themselves (autocatalysis); P3 drives virulence genes including RNAIII.</div></div>
+<div class="qbox"><span class="qn">Q4.</span> Which molecule actually acts as the transcription factor, and in which chemical form?
+  <div class="ans"><b>A4.</b> AgrA, only in its phosphorylated form (AgrA~P), after phosphotransfer from AIP-1-bound AgrC.</div></div>
+<div class="qbox"><span class="qn">Q5.</span> Why is the <i>agr</i> circuit called an "autocatalytic loop"? What keeps it from running away indefinitely?
+  <div class="ans"><b>A5.</b> Because the output — more receptor and more signal production at P2 — amplifies the input, a positive-feedback loop. It stops when concentration falls: dilution by growth into fresh medium (or loss of cells) drops AIP below threshold and the switch reverses; nothing is permanently "on".</div></div>
+<div class="qbox"><span class="qn">Q6.</span> On a P3-lacZ / X-gal plate, what does blue report — and why can't the colour alone tell you <i>why</i> the switch is on or off?
+  <div class="ans"><b>A6.</b> Blue means P3 is active, read out through an <b>introduced reporter</b>: staphylococci do not natively make β-galactosidase — in these strains it comes from a copy of <i>lacZ</i> inserted under P3 control. The colour cannot distinguish quorum-on-from-density (chapter 3) from re-firing after recovery — and it reads identically colourless for "too few cells" vs "interfered", so the cause needs other evidence.</div></div>
+<div class="qbox"><span class="qn">Q7.</span> A skin commensal floods the medium with group II AIP while a dense group I culture sits beside it. Predict the X-gal colour of the <i>S. aureus</i> colonies, and explain at the level of AgrC–AgrA why that happens despite high density.
+  <div class="ans"><b>A7.</b> Colourless. Group II AIP binds group I AgrC as a competitive antagonist: occupancy without phosphotransfer, plus displacement of cognate AIP-1 — so AgrA is never phosphorylated and P3 stays off even though the culture is dense. Interference is antagonism, not lysis.</div></div>
+<div class="qbox"><span class="qn">Q8.</span> List the four AIP groups with their approximate shares among clinical isolates, and give the sequences of AIP-1 and AIP-4. What is the single-residue difference?
+  <div class="ans"><b>A8.</b> I ≈ 60 %, II ≈ 22 %, III ≈ 14 %, IV ≈ 2.5 %. AIP-1 = YSTCDFIM; AIP-4 = YSTCYFIM — one ring residue, Cys⁶→Tyr (position 6).</div></div>
+<div class="qbox"><span class="qn">Q9.</span> After the foreign signal washes out, why do the colonies turn blue again without any new gene being made?
+  <div class="ans"><b>A9.</b> The system is fully reversible: the <i>agr</i> machinery was never destroyed, only out-competed at the receptor. When foreign AIP clears, cognate AIP-1 re-binds AgrC, phosphotransfer resumes, and the still-intact autocatalytic loop refires.</div></div>
+<div class="qbox"><span class="qn">Q10.</span> In chapter 5, dilution by growth into fresh medium resets quorum. Explain why dilution — not cell death — is what matters here.
+  <div class="ans"><b>A10.</b> Quorum tracks concentration in the shared medium. Growth into fresh volume lowers AIP per unit volume below threshold even though every cell is alive and producing — so AgrC dephosphorylates, P3 switches off, and the population returns to the silent state of chapter 1 (the film's seam).</div></div>
 
 <!-- ============ 8 REFERENCES ============ -->
 <div class="refs">
@@ -274,5 +286,14 @@
 </div>
 
 </div>
+<script>
+/* Reveal-on-click for §7: each question box toggles its answer. Print CSS ignores the class, so every answer is always in the PDF. */
+document.querySelectorAll('.qbox').forEach(function(qb){
+  qb.setAttribute('tabindex','0');
+  function toggle(){ qb.classList.toggle('open'); }
+  qb.addEventListener('click',toggle);
+  qb.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); }});
+});
+</script>
 </body>
 </html>
