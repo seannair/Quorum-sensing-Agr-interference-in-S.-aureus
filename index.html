@@ -34,6 +34,17 @@
   #capPill{ position:fixed; left:max(12px, env(safe-area-inset-left)); bottom:calc(20px + env(safe-area-inset-bottom)); z-index:7; max-width:min(592px, calc(100vw - 32px));
        background:#fff; border:1px solid #c7d4ea; border-radius:14px; box-shadow:0 2px 8px rgba(15,23,42,.10); padding:9px 16px; font-size:15px; line-height:1.45; color:#0f172a; pointer-events:none; }
   @media (max-width:560px){ #capPill{ bottom:calc(120px + env(safe-area-inset-bottom)); font-size:14px; max-width:calc(100vw - 32px); } }
+  /* Phone LANDSCAPE (wide but short): the scene fills the full height, so a fixed-px caption pill lands on top of the lower-left scene content AND covers the control bar.
+     Fix — reserve a bottom band for the chrome and shrink the scene to fit above it (#stage's box gets shorter → viewBox "meet" scales the scene down),
+     then stack the caption just ABOVE the control row (separate vertical bands) so nothing overlaps.
+     Gated on width AND height: desktop (tall, >480px) and portrait phones (narrow ≤560px) never match this block, so they are untouched. */
+  @media (min-width:561px) and (max-height:480px){
+    #stage{ height:calc(100% - 150px); }          /* base rule sets height:100%; override it to (viewport − 150px) so the box is shorter and top-anchored → viewBox "meet" scales the scene down above a reserved 150px chrome band. (height:auto won't work — an <svg> with a viewBox snaps auto-height to its intrinsic 16:9 ratio from width.) */
+    #ui{ gap:8px; }                                /* keep the control row on one line even at narrow landscape widths… */
+    #scrub{ width:min(24vw, 150px); }              /* …so the caption below can clear it without wrapping into it */
+    #spd{ width:70px; }
+    #capPill{ bottom:calc(64px + env(safe-area-inset-bottom)); font-size:12px; line-height:1.35; padding:7px 12px; max-width:min(78vw, 660px); }
+  }
 </style>
 </head>
 <body>
