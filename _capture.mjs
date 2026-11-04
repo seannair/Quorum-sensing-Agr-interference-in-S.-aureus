@@ -1,6 +1,6 @@
 /* Deterministic MP4 frame capture: drives window.__AGRQS.render(i/30) via Playwright,
    screenshots the 1920x1080 viewport per frame into _frames/.
-   Usage: node _capture.mjs [start] [endExclusive]   (set end = D*FPS; default 1080 = 36 s @ 30 fps)
+   Usage: node _capture.mjs [start] [endExclusive]   (set end = D*FPS; default 1440 = 48 s @ 30 fps)
    Encode afterwards with the WinGet Gyan.FFmpeg libx264 build ONLY — see playbook §4. */
 import { createRequire } from 'module';
 import fs from 'fs';
@@ -17,7 +17,7 @@ const DIR = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(DIR, '_frames');
 const FPS = 30;
 const start = Number(process.argv[2] ?? 0);
-const end = Number(process.argv[3] ?? 1080); // exclusive
+const end = Number(process.argv[3] ?? 1440); // exclusive — D*FPS (48 s × 30 fps) for the full loop
 
 if (BASE.includes('<PROJECT_DIR>')) { console.error('EDIT ME: set BASE to this project\'s index.html first'); process.exit(2); }
 
