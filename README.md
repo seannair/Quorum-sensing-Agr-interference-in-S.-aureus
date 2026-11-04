@@ -10,6 +10,8 @@ No dependencies — open `index.html` in any modern browser. Works on desktop an
 |---|---|---|
 | **[Quorum sensing & Agr interference in *S. aureus*](https://seannair.github.io/Quorum-sensing-Agr-interference-in-S.-aureus/)** | cells count themselves with AIP-1 — and a foreign signal can silence the quorum | 5 chapters · 48 s loop |
 
+Want to go deeper? The [study guide](https://seannair.github.io/Quorum-sensing-Agr-interference-in-S.-aureus/study-guide.html) (printable HTML; [8-page PDF version](https://seannair.github.io/Quorum-sensing-Agr-interference-in-S.-aureus/study-guide.pdf)) walks through each chapter with labelled figures, a vocabulary table and ten practice questions with answers.
+
 ![QUORUM ON chapter — AgrA~P docked under P2/P3, mature AIP-1 streaming out of AgrB into the population](docs/quorum-on.png)
 ![INVASION → SILENT chapter — non-cognate red AIP displaces AIP-1 at AgrC; colonies stay colourless on X-gal](docs/invasion-silent.png)
 
@@ -91,6 +93,7 @@ Verify with `ffprobe` (expect 48 s, 1920×1080, 30 fps, 1440 frames) + a full de
 | File | Purpose |
 |---|---|
 | `index.html` | The animation (self-contained: markup + styles + timeline engine) |
+| [`study-guide.html`](https://seannair.github.io/Quorum-sensing-Agr-interference-in-S.-aureus/study-guide.html), `study-guide.pdf` | Study guide — companion to the animation (printable HTML + 8-page A4 PDF): five-chapter map, quorum-sensing mechanism with two vector figures (AIP-1 thiolactone; AgrC–AgrA pathway incl. non-cognate antagonism), virulence output + X-gal readout, AIP groups I–IV table, simplifications, vocabulary quick-reference, ten questions with answers, PubMed-checked references |
 | `LICENSE`, `LICENSE-MIT`, `LICENSE-CC-BY-4.0` | Dual licence — MIT for the software, CC BY 4.0 for the content (captions, visual design, captures); see `LICENSE` for the split and suggested attribution |
 | `docs/quorum-on.png`, `docs/invasion-silent.png` | Chapter figures shown above in this README (captured from `?t=24&render=1` and `?t=36.8&render=1`) |
 | `_capture.mjs` | MP4 frame-capture harness (Playwright, drives `window.__AGRQS.render`) — see "Rendering the MP4" |

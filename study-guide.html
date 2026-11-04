@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Study guide — Quorum sensing &amp; Agr interference in S. aureus</title>
+<style>
+  :root{
+    --ink:#1e293b; --muted:#5b6b82; --line:#dbe4f0; --bg-soft:#f4f8fd;
+    --blue:#3b82f6; --red:#ef4444; --amber:#f59e0b; --violet:#8b5cf6; --teal:#14b8a6; --green:#16a34a;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body{ font-family:"Segoe UI", system-ui, -apple-system, Arial, sans-serif; color:var(--ink); font-size:10.5pt; line-height:1.55; background:#fff; }
+  @page{ size:A4; margin:15mm 16mm; }
+
+  .wrap{ max-width:none; }
+  h1{ font-size:21pt; letter-spacing:-.3px; margin-bottom:4px; }
+  h2{ font-size:13.5pt; margin:20px 0 8px; padding-top:10px; border-top:2px solid var(--line); page-break-after:avoid; }
+  h2 .num{ display:inline-block; min-width:24px; color:var(--blue); font-weight:800; }
+  h3{ font-size:11pt; margin:12px 0 5px; page-break-after:avoid; }
+  p{ margin:6px 0; }
+  em, i.gene{ font-style:italic; }
+  ul, ol{ margin:6px 0 8px 20px; }
+  li{ margin:3px 0; }
+  table{ width:100%; border-collapse:collapse; margin:8px 0 4px; page-break-inside:auto; }
+  th, td{ border:1px solid var(--line); padding:5px 8px; text-align:left; vertical-align:top; font-size:9.6pt; }
+  th{ background:var(--bg-soft); font-weight:700; }
+  tr{ page-break-inside:avoid; }
+
+  .titleblock{ border-bottom:3px solid var(--blue); padding-bottom:12px; margin-bottom:6px; }
+  .subtitle{ color:var(--muted); font-size:10.5pt; margin-top:4px; }
+  .meta{ display:flex; justify-content:space-between; align-items:center; margin-top:8px; font-size:9pt; color:var(--muted); }
+  .credit{ font-style:italic; }
+
+  .callout{ background:var(--bg-soft); border-left:4px solid var(--blue); padding:8px 12px; margin:10px 0; page-break-inside:avoid; }
+  .callout.amber{ border-left-color:var(--amber); }
+  .callout.red{ border-left-color:var(--red); }
+  .callout.green{ border-left-color:var(--green); }
+
+  .chip{ display:inline-block; padding:1px 8px; border-radius:10px; font-size:8.6pt; font-weight:700; color:#fff; }
+  .chip.b{ background:var(--blue);} .chip.r{ background:var(--red);} .chip.a{ background:var(--amber);} .chip.v{ background:var(--violet);} .chip.t{ background:var(--teal);}
+
+  figure{ margin:12px 0; page-break-inside:avoid; text-align:center; }
+  figcaption{ font-size:8.8pt; color:var(--muted); margin-top:5px; }
+
+  .qbox{ border:1px solid var(--line); border-radius:8px; padding:9px 12px; margin:8px 0; page-break-inside:avoid; background:#fff; }
+  .qbox .qn{ font-weight:800; color:var(--blue); }
+  .ans h3{ color:var(--green); margin-top:14px; }
+  ol.anslist li{ margin:5px 0; page-break-inside:avoid; }
+
+  .refs p{ font-size:9pt; margin:3px 0; }
+  a{ color:#2563eb; text-decoration:none; word-break:break-all; }
+  .small{ font-size:8.8pt; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ============ TITLE ============ -->
+<div class="titleblock">
+  <h1>Quorum sensing &amp; <i>Agr</i> interference in <i>S. aureus</i></h1>
+  <div class="subtitle">Study guide — companion to the 48-second, five-chapter teaching animation of how staphylococci count themselves with AIP-1, and how a foreign signal can silence their quorum.</div>
+  <div class="meta">
+    <span>5 chapters · 9.6 s each · seamless loop (frame 0 ≡ frame 48)</span>
+    <span class="credit">© Sean P Nair</span>
+  </div>
+</div>
+
+<p><b>How to use this guide.</b> Watch the animation once in full, then read each section below while scrubbing back to the matching chapter (the five dots under the play button jump straight to a chapter; <code>?t=seconds</code> in the URL freezes any frame). The questions at the end test exactly what the film shows — answers are given after them. Where the animation takes teaching liberties, they are flagged openly so you do not mistake them for scale.</p>
+
+<!-- ============ 1 CHAPTER MAP ============ -->
+<h2><span class="num">1</span>The five-chapter loop at a glance</h2>
+<table>
+  <tr><th style="width:9%">Chapter</th><th style="width:9%">Starts</th><th style="width:34%">What you see on screen</th><th>Idea to take away</th></tr>
+  <tr><td><b>1 · SILENCE</b></td><td>0 s</td><td>A sparse culture. Each coccus makes AIP-1, but at low density the peptide is diluted below the threshold (dashed line on the gauge); <i>AgrC</i> stays unphosphorylated — red ✕ over P2/P3; X-gal dish colourless.</td><td>Signal + receiver exist at every density. What changes with density is the <b>concentration</b>, and only above threshold does anything happen.</td></tr>
+  <tr><td><b>2 · GROWTH &amp; ACCUMULATION</b></td><td>9.6 s</td><td>Cocci divide on the left; each daughter adds its own AIP-1 share and the blue meter climbs. Mid-chapter the threshold crossing flashes orange: <i>AgrC</i> hands a phosphate to <i>AgrA</i>, which fires P3.</td><td>Growth is what raises concentration — every division event injects more signal into the shared medium. The switch flips at a defined threshold, not gradually.</td></tr>
+  <tr><td><b>3 · QUORUM ON</b></td><td>19.2 s</td><td>The autocatalytic loop: amber <i>agrBDCA</i> mRNA marching along the operon; AgrA~P docked under P2/P3. Inside the cell, the <i>AgrD</i> propeptide is cleaved and cyclised by <i>AgrB</i> into mature AIP-1 that streams out into the population. The dish turns blue.</td><td>Above threshold the system <b>amplifies itself</b>: more signal → more receptor/signal genes → even more signal. Virulence output (blue = P3-<i>lacZ</i>) is a population-level all-or-none event.</td></tr>
+  <tr><td><b>4 · INVASION → SILENT</b></td><td>28.8 s</td><td>A skin commensal slides in on the right, multiplies first (three daughters), then floods the medium with non-cognate red AIP. It displaces AIP-1 at <i>AgrC</i>: P3 stays off despite high density — colonies stay colourless.</td><td>Interference is <b>competitive antagonism, not killing</b>. A foreign peptide that binds the receptor but does not activate it can veto quorum even in a dense culture.</td></tr>
+  <tr><td><b>5 · RECOVERY &amp; RESET</b></td><td>38.4 s</td><td>The foreign signal washes out; cognate AIP-1 re-binds and the loop refires (blue returns). Then dilution — growth into fresh medium — pushes AIP below threshold again: back to silence, exactly where we started.</td><td>Both states are <b>reversible</b>. Quorum is not a permanent identity; it tracks current signal concentration in real time.</td></tr>
+</table>
+
+<!-- ============ 2 QUORUM SENSING ============ -->
+<h2><span class="num">2</span>Quorum sensing: the counting mechanism</h2>
+<p><b>Quorum sensing (QS)</b> is a population-level communication system: cells secrete small signalling molecules called <b>autoinducers</b>, and when their extracellular concentration crosses a threshold, the whole population co-ordinately switches on genes that are only useful in numbers. In <i>Staphylococcus aureus</i> this is the <i>agr</i> (accessory gene regulator) system.</p>
+
+<h3>The signal: AIP-1, a thiolactone peptide</h3>
+<p><b>AIP-1</b> (autoinducer peptide 1) is an octapeptide — sequence <b>YSTCDFIM</b>. Its N-terminal Tyr-Ser-Thr tail projects from a five-residue ring (<b>Cys⁴–Asp⁵–Phe⁶–Ile⁷–Met⁸</b>) closed by a thiolactone S-bond. The ring is not decoration: it is essential for receptor activity, and even single amino-acid differences in the ring separate the AIP groups (Section 4).</p>
+
+<figure>
+  <svg width="300" height="120" viewBox="0 0 300 120" role="img" aria-label="AIP-1 octapeptide: three-residue tail and five-residue thiolactone ring">
+    <!-- tail -->
+    <g font-family="Segoe UI, Arial" font-size="9.5" text-anchor="middle">
+      <circle cx="34" cy="60" r="12" fill="#cbd5e1"/><text x="34" y="64">Tyr¹</text>
+      <line x1="46" y1="60" x2="58" y2="60" stroke="#94a3b8" stroke-width="2"/>
+      <circle cx="70" cy="60" r="12" fill="#cbd5e1"/><text x="70" y="64">Ser²</text>
+      <line x1="82" y1="60" x2="94" y2="60" stroke="#94a3b8" stroke-width="2"/>
+      <circle cx="106" cy="60" r="12" fill="#cbd5e1"/><text x="106" y="64">Thr³</text>
+      <!-- ring -->
+      <circle cx="170" cy="34" r="12" fill="#3b82f6"/><text x="170" y="38" fill="#fff">Cys⁴</text>
+      <circle cx="205" cy="52" r="12" fill="#3b82f6"/><text x="205" y="56" fill="#fff">Asp⁵</text>
+      <circle cx="194" cy="92" r="12" fill="#3b82f6"/><text x="194" y="96" fill="#fff">Phe⁶</text>
+      <circle cx="150" cy="92" r="12" fill="#3b82f6"/><text x="150" y="96" fill="#fff">Ile⁷</text>
+      <circle cx="139" cy="52" r="12" fill="#3b82f6"/><text x="139" y="56" fill="#fff">Met⁸</text>
+      <line x1="117" y1="56" x2="128" y2="49" stroke="#94a3b8" stroke-width="2"/>
+      <path d="M181 37 L194 47 M205 64 Q208 78 199 84 M182 94 L163 94 M139 80 L139 64" stroke="#f59e0b" stroke-width="2.5" fill="none"/>
+      <text x="170" y="66" font-size="8.5" fill="#b45309">thiolactone</text>
+      <text x="170" y="78" font-size="8.5" fill="#b45309">(S-bond) ring</text>
+    </g>
+  </svg>
+  <figcaption><b>Figure A.</b> AIP-1 = YSTCDFIM: a Tyr-Ser-Thr tail (grey) attached to the Cys⁴–Met⁸ thiolactone ring (blue, amber bonds). The ring is essential for receptor activity; one residue change (Cys→Tyr at position 6) gives AIP-4.</figcaption>
+</figure>
+
+<h3>Making and exporting the signal</h3>
+<p>The <i>agrD</i> gene encodes a ~45-residue <b>propeptide</b>, which is biologically inert. The transmembrane protein <span class="chip t">AgrB</span> — a cysteine endopeptidase anchored in the membrane — cleaves the C-terminus of the propeptide and cyclises it into the thiolactone; this same step gates export, so mature AIP-1 appears directly outside the cell. That is why the film shows the ring travelling out through AgrB: <b>maturation and secretion are one coupled event</b>.</p>
+
+<h3>The receiver: a two-component system</h3>
+<p><span class="chip v">AgrC</span> spans the membrane (a histidine-kinase receptor). When AIP-1 binds its extracellular domain, AgrC transfers a phosphate to <span class="chip v">AgrA</span>, the response regulator in the cytoplasm. Phosphorylated <b>AgrA~P</b> is the transcription factor that actually acts on DNA: it turns on P3 (virulence genes) and — crucially — re-switches on its own operon at P2, closing a positive-feedback loop.</p>
+
+<figure>
+  <svg width="560" height="190" viewBox="0 0 560 190" role="img" aria-label="Signal pathway: AIP-1 binds AgrC, phosphate to AgrA, which activates P2 (autocatalysis) and P3 (virulence); non-cognate red AIP blocks without activating">
+    <g font-family="Segoe UI, Arial" font-size="10">
+      <!-- membrane -->
+      <rect x="252" y="8" width="26" height="174" fill="#fde68a"/>
+      <text x="265" y="188" text-anchor="middle" font-size="8.5" fill="#92400e">membrane</text>
+      <!-- AIP-1 -->
+      <circle cx="70" cy="70" r="13" fill="#3b82f6"/><text x="70" y="74" text-anchor="middle" font-size="9" fill="#fff">AIP-1</text>
+      <!-- AgrC receptor -->
+      <rect x="252" y="52" width="26" height="58" rx="6" fill="#8b5cf6"/>
+      <circle cx="243" cy="70" r="9" fill="#c4b5fd"/><text x="243" y="73.5" text-anchor="middle" font-size="7.5" fill="#4c1d95">S</text>
+      <circle cx="287" cy="70" r="9" fill="#c4b5fd"/><text x="287" y="73.5" text-anchor="middle" font-size="7.5" fill="#4c1d95">H</text>
+      <text x="265" y="128" text-anchor="middle" font-weight="700">AgrC</text>
+      <!-- phosphate arrow -->
+      <line x1="300" y1="70" x2="340" y2="70" stroke="#f59e0b" stroke-width="2.5"/>
+      <polygon points="340,70 332,66 332,74" fill="#f59e0b"/>
+      <circle cx="318" cy="58" r="8" fill="#fbbf24"/><text x="318" y="61.5" text-anchor="middle" font-size="8" fill="#78350f">P</text>
+      <!-- AgrA -->
+      <circle cx="370" cy="70" r="16" fill="#8b5cf6"/><text x="370" y="74" text-anchor="middle" font-size="9.5" fill="#fff">AgrA~P</text>
+      <!-- P2 -->
+      <line x1="400" y1="70" x2="470" y2="38" stroke="#f59e0b" stroke-width="2"/>
+      <polygon points="470,38 462,40 466,46" fill="#f59e0b"/>
+      <rect x="452" y="18" width="76" height="26" rx="5" fill="#fff7ed" stroke="#f59e0b"/><text x="490" y="35" text-anchor="middle">P2 · agr genes</text>
+      <!-- P3 -->
+      <line x1="400" y1="78" x2="468" y2="108" stroke="#f59e0b" stroke-width="2"/>
+      <polygon points="468,108 460,105 463,112" fill="#f59e0b"/>
+      <rect x="452" y="102" width="76" height="26" rx="5" fill="#fff7ed" stroke="#f59e0b"/><text x="490" y="119" text-anchor="middle">P3 · virulence</text>
+      <text x="490" y="140" text-anchor="middle" font-size="8.5" fill="#5b6b82">RNAIII, PVL, TSST-1…</text>
+      <!-- feedback loop back to AIP -->
+      <path d="M452 30 C 330 -6, 90 8, 70 55" stroke="#f59e0b" stroke-width="2" fill="none" stroke-dasharray="5 4"/>
+      <polygon points="70,55 74,47 63,49" fill="#f59e0b"/>
+      <text x="150" y="18" font-size="8.5" fill="#b45309">more receptor + signal → autocatalysis</text>
+      <!-- red blocker -->
+      <circle cx="70" cy="128" r="13" fill="#ef4444"/><text x="70" y="132" text-anchor="middle" font-size="8.5" fill="#fff">AIP-II</text>
+      <line x1="83" y1="128" x2="243" y2="92" stroke="#ef4444" stroke-width="2"/>
+      <circle cx="243" cy="90" r="7" fill="#fecaca" stroke="#ef4444"/><text x="243" y="93.5" text-anchor="middle" font-size="8" fill="#b91c1c">✕</text>
+      <text x="150" y="160" font-size="8.5" fill="#b91c1c">binds, no phosphate → antagonism (no response)</text>
+    </g>
+  </svg>
+  <figcaption><b>Figure B.</b> The AgrC–AgrA two-component system. Blue AIP-1 triggers phosphotransfer to AgrA, which activates P3 (virulence) and re-activates its own operon at P2 (autocatalytic loop). Red non-cognate AIP occupies the receptor without triggering phosphorylation — antagonism, not an opposite response.</figcaption>
+</figure>
+
+<h3>The threshold logic</h3>
+<ul>
+  <li><b>Below threshold:</b> AgrC is mostly unphosphorylated; P2/P3 are off (the red ✕ marks in the film). The culture can still make AIP-1 — production and sensing run at every density.</li>
+  <li><b>Crossing:</b> a sharp, population-wide flip — not a slow ramp. In the film this is the orange threshold flash.</li>
+  <li><b>Above threshold (autocatalysis):</b> AgrA~P re-switches on its own operon at P2, so more receptor and signal are made; quorum reinforces itself until concentration falls again.</li>
+</ul>
+
+<!-- ============ 3 VIRULENCE OUTPUT ============ -->
+<h2><span class="num">3</span>The output: what "QUORUM ON" actually turns on</h2>
+<p>P3 drives a regulon centred on the regulatory RNA <b>RNAIII</b>, which in turn activates virulence factors and represses protective ones. Two exotoxins named in the animation are real, Agr-dependent proteins:</p>
+<ul>
+  <li><b>PVL (leucocidin)</b> / lukSF-PV — kills neutrophils.</li>
+  <li><b>TSST-1</b> (toxic shock syndrome toxin-1) / C3 — superantigens behind toxic-shock physiology.</li>
+</ul>
+<p>The blue dish in the film is a standard reporter readout: a <i>P3-lacZ</i> construct (e.g. strain SH101F7, RNAIII::lacZ) makes β-galactosidase only when P3 is active, and X-gal substrate turns colonies blue. So in the film, <b>blue = quorum ON; colourless = off — whether from low density or from interference</b>. That ambiguity is itself a teaching point: the readout reports switch state, not cause.</p>
+
+<div class="callout"><b>Reading X-gal plates correctly (Canovas et al. 2016, Fig 1).</b> On an interference plate, <i>S. aureus</i> colonies growing far from a commensal lawn turn blue; those near the lawn stay colourless even at high local density — the foreign AIP has vetoed their quorum. Colourless ≠ dead or deficient: it means P3 is off.</div>
+
+<!-- ============ 4 INTERFERENCE ============ -->
+<h2><span class="num">4</span>Agr interference: non-cognate AIPs and the AIP groups</h2>
+<p>Clinical <i>S. aureus</i> isolates fall into four <b>AIP groups (I–IV)</b>, defined by their autoinducer peptide sequence; each group's AgrC responds best to its own ("cognate") AIP. Approximate distribution among clinical isolates: I ≈ 60 %, II ≈ 22 %, III ≈ 14 %, IV ≈ 2.5 %.</p>
+<table>
+  <tr><th style="width:14%">Group</th><th style="width:20%">Share of isolates</th><th style="width:30%">Cognate AIP</th><th>Note</th></tr>
+  <tr><td>I</td><td>~60 %</td><td>AIP-1 = YSTCDFIM</td><td>The "standard" strain; the film's protagonist.</td></tr>
+  <tr><td>II</td><td>~22 %</td><td>AIP-II (different ring residues)</td><td>The film's commensal signal, drawn in red. Classic source of interference against group I strains.</td></tr>
+  <tr><td>III</td><td>~14 %</td><td>AIP-III</td><td>Frequently found in livestock-associated lineages.</td></tr>
+  <tr><td>IV</td><td>~2.5 %</td><td>AIP-4 = YSTCYFIM (Cys⁶→Tyr)</td><td>Rare; the "I &amp; IV interchangeable" note on screen is slide-level shorthand — groups I and IV share the closest sequences but are not functionally identical in every assay.</td></tr>
+</table>
+<p><b>Mechanism of interference:</b> a non-cognate AIP that binds an alien AgrC occupies it without triggering phosphotransfer. Cognate AIP-1 is competitively displaced, so even at high density the two-component switch never fires — P3 stays off. This is <b>antagonism</b>: the foreign signal produces "no response", not a reversed one, and it does not kill the host cells.</p>
+<div class="callout red"><b>Ecology, from Paharik et al. 2017:</b> coagulase-negative staphylococci (skin commensals) block <i>S. aureus</i> quorum sensing in vivo, keeping the pathogen's virulence genes off while it colonises — a natural example of exactly what chapter 4 animates.</div>
+<p>Cross-group inhibition is dose-dependent and graded: close relatives still inhibit each other (measured EC₅₀s, Gordon et al. 2013), so "non-cognate" is a spectrum, not a wall. And because binding is reversible, when the foreign signal clears — as in chapter 5 — cognate AIP-1 re-binds and the loop refires.</p>
+
+<!-- ============ 5 SIMPLIFICATIONS ============ -->
+<h2><span class="num">5</span>Where the animation is simplified</h2>
+<ul>
+  <li><b>Scale:</b> cocci (~1 µm) and AIP monomers (~1 kDa) are drawn huge; at true scale neither would be visible.</li>
+  <li><b>Counts vs concentration:</b> the ten blue / up-to-five red glyph molecules stand for <i>concentration</i>, not molecule counts or cell numbers; the threshold meter is a teaching device, not an assay readout.</li>
+  <li><b>One cell tells the population's story:</b> real QS is population-level — the marching mRNA and export ring in chapter 3 stand in for what every above-threshold cell does at once.</li>
+  <li><b>The commensal</b> is a generic coagulase-negative staphylococcus making non-cognate (e.g. group II) AIP; red shows competitive antagonism, not killing — the <i>S. aureus</i> population survives and refires when the foreign signal clears.</li>
+  <li><b>Time is compressed evenly:</b> each chapter gets 9.6 s regardless of how long that state lasts in reality (a real culture can hold quorum for hours, or never reach it).</li>
+</ul>
+
+<!-- ============ 6 VOCABULARY ============ -->
+<h2><span class="num">6</span>Vocabulary quick-reference</h2>
+<table>
+  <tr><th style="width:24%">Term</th><th>Meaning in this system</th></tr>
+  <tr><td>Quorum sensing</td><td>Density-dependent co-ordinated gene regulation via secreted autoinducers.</td></tr>
+  <tr><td>Autoinducer (AIP)</td><td>The small signalling peptide; AIP-1 = YSTCDFIM thiolactone in group I strains.</td></tr>
+  <tr><td>Cognate / non-cognate</td><td>AIP matching the strain's own AgrC vs a foreign one that binds without activating it.</td></tr>
+  <tr><td>Thiolactone ring</td><td>Cys⁴–Met⁸ macrocycle closed by an S-bond; essential for receptor activity.</td></tr>
+  <tr><td>Propeptide (AgrD product)</td><td>The ~45-residue inert precursor that AgrB cleaves and cyclises into mature AIP, coupled to export.</td></tr>
+  <tr><td>AgrB</td><td>Transmembrane cysteine endopeptidase; maturation + exporter for AIP-1.</td></tr>
+  <tr><td>Two-component system</td><td>Membrane sensor kinase (AgrC) + cytoplasmic response regulator (AgrA), coupled by phosphotransfer.</td></tr>
+  <tr><td>AgrA~P</td><td>Phosphorylated AgrA — the transcription factor that activates P3 and re-activates its own operon at P2.</td></tr>
+  <tr><td>P2 / P3</td><td>P2 = autocatalytic <i>agr</i> transcription; P3 = virulence regulon (RNAIII, exotoxins).</td></tr>
+  <tr><td>Autocatalysis / positive feedback</td><td>The output of the switch (more receptor + signal) amplifies its own input — quorum reinforces itself.</td></tr>
+  <tr><td>Threshold</td><td>The AIP concentration at which AgrC–AgrA flips on; density-dependent because signal is shared in the medium and diluted when sparse.</td></tr>
+  <tr><td>RNAIII</td><td>Regulatory RNA under P3 that activates virulence genes (e.g. PVL, TSST-1) and represses others.</td></tr>
+  <tr><td>P3-lacZ / X-gal readout</td><td>Reporter: β-galactosidase from a P3-driven construct; blue colonies = P3 active (quorum ON).</td></tr>
+  <tr><td>Competitive antagonism</td><td>Non-cognate AIP occupying the receptor and vetoing quorum without activating or killing — "no response", not an opposite one.</td></tr>
+  <tr><td>AIP groups I–IV</td><td>The four autoinducer families of clinical <i>S. aureus</i> (~60/22/14/2.5 %); basis of cross-strain interference.</td></tr>
+</table>
+
+<!-- ============ 7 QUESTIONS ============ -->
+<h2><span class="num">7</span>Check your understanding</h2>
+<div class="qbox"><span class="qn">Q1.</span> Why does AIP-1 accumulate only when the population is dense, even though every cell — sparse or crowded — is making it?</div>
+<div class="qbox"><span class="qn">Q2.</span> What structural feature makes AIP-1 biologically active, and which protein creates it? Why are maturation and export described as one coupled event?</div>
+<div class="qbox"><span class="qn">Q3.</span> Name the four proteins of the <i>agr</i> locus shown on screen and state what P2 versus P3 each control.</div>
+<div class="qbox"><span class="qn">Q4.</span> Which molecule actually acts as the transcription factor, and in which chemical form?</div>
+<div class="qbox"><span class="qn">Q5.</span> Why is the <i>agr</i> circuit called an "autocatalytic loop"? What keeps it from running away indefinitely?</div>
+<div class="qbox"><span class="qn">Q6.</span> On a P3-lacZ / X-gal plate, what does blue report — and why can't the colour alone tell you <i>why</i> the switch is on or off?</div>
+<div class="qbox"><span class="qn">Q7.</span> A skin commensal floods the medium with group II AIP while a dense group I culture sits beside it. Predict the X-gal colour of the <i>S. aureus</i> colonies, and explain at the level of AgrC–AgrA why that happens despite high density.</div>
+<div class="qbox"><span class="qn">Q8.</span> List the four AIP groups with their approximate shares among clinical isolates, and give the sequences of AIP-1 and AIP-4. What is the single-residue difference?</div>
+<div class="qbox"><span class="qn">Q9.</span> After the foreign signal washes out, why do the colonies turn blue again without any new gene being made?</div>
+<div class="qbox"><span class="qn">Q10.</span> In chapter 5, dilution by growth into fresh medium resets quorum. Explain why dilution — not cell death — is what matters here.</div>
+
+<h3 class="ans" style="page-break-before:always;">Answers</h3>
+<ol class="anslist">
+  <li><b>A1.</b> AIP-1 is secreted into the shared medium, so its concentration scales with cell number per unit volume. When sparse it diffuses away and stays below threshold; as divisions add producers (and each daughter inherits production), the cumulative concentration crosses threshold and flips AgrC–AgrA on.</li>
+  <li><b>A2.</b> The Cys⁴–Met⁸ thiolactone ring — essential for receptor activity. <i>AgrB</i>, a transmembrane cysteine endopeptidase, cleaves the ~45-residue AgrD propeptide and cyclises it; that same step gates export through the membrane, so mature AIP-1 appears directly extracellularly.</li>
+  <li><b>A3.</b> <i>agrA</i> (response regulator), <i>agrC</i> (receptor/histidine kinase), <i>agrD</i> (signal propeptide) and <i>agrb</i> (maturation/export endopeptidase). P2 drives transcription of the signal genes themselves (autocatalysis); P3 drives virulence genes including RNAIII.</li>
+  <li><b>A4.</b> AgrA, only in its phosphorylated form (AgrA~P), after phosphotransfer from AIP-1-bound AgrC.</li>
+  <li><b>A5.</b> Because the output — more receptor and more signal production at P2 — amplifies the input, a positive-feedback loop. It stops when concentration falls: dilution by growth into fresh medium (or loss of cells) drops AIP below threshold and the switch reverses; nothing is permanently "on".</li>
+  <li><b>A6.</b> Blue reports P3 activity only (via β-galactosidase from a P3-driven <i>lacZ</i>). It cannot distinguish quorum-on-from-density (chapter 3) from the same state produced by re-firing after recovery — and it reads identically colourless for "too few cells" vs "interfered", so the cause needs other evidence.</li>
+  <li><b>A7.</b> Colourless. Group II AIP binds group I AgrC as a competitive antagonist: occupancy without phosphotransfer, plus displacement of cognate AIP-1 — so AgrA is never phosphorylated and P3 stays off even though the culture is dense. Interference is antagonism, not lysis.</li>
+  <li><b>A8.</b> I ≈ 60 %, II ≈ 22 %, III ≈ 14 %, IV ≈ 2.5 %. AIP-1 = YSTCDFIM; AIP-4 = YSTCYFIM — one ring residue, Cys⁶→Tyr (position 6).</li>
+  <li><b>A9.</b> The system is fully reversible: the <i>agr</i> machinery was never destroyed, only out-competed at the receptor. When foreign AIP clears, cognate AIP-1 re-binds AgrC, phosphotransfer resumes, and the still-intact autocatalytic loop refires.</li>
+  <li><b>A10.</b> Quorum tracks concentration in the shared medium. Growth into fresh volume lowers AIP per unit volume below threshold even though every cell is alive and producing — so AgrC dephosphorylates, P3 switches off, and the population returns to the silent state of chapter 1 (the film's seam).</li>
+</ol>
+
+<!-- ============ 8 REFERENCES ============ -->
+<div class="refs">
+<h2><span class="num">8</span>References</h2>
+<p>Simplified for teaching; species-specific facts verified against primary literature. Links are stable PubMed/PMC identifiers.</p>
+<ul style="list-style:none; margin-left:0;">
+  <li>Zhang Y, Ji G. The agr quorum-sensing circuit and AgrB endopeptidase. <i>J Bacteriol</i> 186:6706 (2004). — pubmed.ncbi.nlm.nih.gov/15466021</li>
+  <li>Polaske et al. The <i>agr</i> locus and AIP maturation/export. <i>Isr J Chem</i> 63:e202200096 (2023). — pubmed.ncbi.nlm.nih.gov/38765792</li>
+  <li>Hawver et al. AIP structures and cross-inhibition. <i>FEMS Microbiol Rev</i> 40:738 (2016). — pubmed.ncbi.nlm.nih.gov/27354348</li>
+  <li>Lyon et al. AIP-1 sequence/activity. <i>Biochemistry</i> 41:10095 (2002). — pubmed.ncbi.nlm.nih.gov/12146974</li>
+  <li>Mayville et al. The thiolactone ring is essential for activity. <i>PNAS</i> 96:1218 (1999). — pubmed.ncbi.nlm.nih.gov/9990004</li>
+  <li>Jarraud et al. AIP groups I–IV defined. <i>J Bacteriol</i> 182:6517 (2000). — pubmed.ncbi.nlm.nih.gov/11053400</li>
+  <li>Stock et al. AIP group diversity. <i>Infect Immun</i> 90:e0026322 (2022). — pubmed.ncbi.nlm.nih.gov/36073934</li>
+  <li>Williams P et al. Group distribution ~60/22/14/2.5 %. <i>Microbiology</i> 171:073801 (2025). — pubmed.ncbi.nlm.nih.gov/40742629</li>
+  <li>Gordon, Williams &amp; Chan. Cross-inhibition EC₅₀s between groups. <i>J Med Chem</i> 56:1389 (2013). — pubmed.ncbi.nlm.nih.gov/23294220</li>
+  <li>Ji et al. Non-cognate AIP antagonism at AgrC. <i>Science</i> 276:2027 (1997). — pubmed.ncbi.nlm.nih.gov/9197262 · Ji et al. <i>PNAS</i> 95:12055 (1995) — pubmed.ncbi.nlm.nih.gov/8618843</li>
+  <li>Geisinger et al. P3-lacZ / X-gal readout. <i>JBC</i> 283:8930 (2008). — pubmed.ncbi.nlm.nih.gov/18222919</li>
+  <li>Karathanasi et al. SH101F7 RNAIII::lacZ strain. <i>Sci Rep</i> 8:3562 (2018). — pmc.ncbi.nlm.nih.gov/articles/PMC5824847</li>
+  <li>Canovas et al. Interference-plate motif (Fig 1). <i>Front Microbiol</i> 7:1733 (2016). — pmc.ncbi.nlm.nih.gov/articles/PMC5099252 · see also Peng et al. <i>Front Microbiol</i> 10:2212 (2019) — pmc.ncbi.nlm.nih.gov/articles/PMC6777374</li>
+  <li>Ramundo et al. PVL/lukSF-PV as Agr-dependent exotoxins. <i>Int J Med Microbiol</i> 306:367 (2016). — pubmed.ncbi.nlm.nih.gov/27265234 · MDowell et al. TSST-1/C3, <i>Mol Microbiol</i> 41:503 (2001) — pubmed.ncbi.nlm.nih.gov/11489134</li>
+  <li>Williams et al. The P3/RNAIII regulon reviewed. <i>Microbiology</i> 169:001381 (2023). — pubmed.ncbi.nlm.nih.gov/37578829</li>
+  <li>Paharik et al. Commensals block <i>S. aureus</i> QS in vivo. <i>Cell Host Microbe</i> 22:746 (2017). — pubmed.ncbi.nlm.nih.gov/29199097</li>
+</ul>
+<p class="small" style="margin-top:8px;">Companion animation: <code>index.html</code> in this repository (or the GitHub Pages site) · deterministic 48 s loop, scrubbing and freeze-frames via URL parameters.</p>
+</div>
+
+</div>
+</body>
+</html>
